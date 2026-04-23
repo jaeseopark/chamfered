@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chamfered - Biggest shopping center</title>
+  <title>Chamfered - All Things 3D Printing</title>
 
   <!-- 
     - favicon
@@ -36,10 +36,7 @@
 
       <div class="overlay" data-overlay></div>
 
-      <a href="#home" id="home" class="logo">
-        <img src="./assets/images/logo.svg" alt="Chamfered logo" width="36" height="36">
-        <span class="logo-text">Chamfered</span>
-      </a>
+      <span id="home"></span>
 
       <div class="header-actions">
 
@@ -69,15 +66,14 @@
         <ul class="navbar-list">
 
           <li>
-            <a href="#home" class="navbar-link">Home</a>
+            <a href="#home" class="navbar-link logo-link">
+              <img src="./assets/images/logo.svg" alt="Chamfered logo" width="24" height="24">
+              <span class="logo-text">Chamfered</span>
+            </a>
           </li>
 
           <li>
             <a href="#shop" class="navbar-link">Shop</a>
-          </li>
-
-          <li>
-            <a href="#about" class="navbar-link">About</a>
           </li>
 
           <li>
@@ -694,34 +690,69 @@
         - #NEWSLETTER
       -->
 
-      <section id="about" class="section newsletter">
+      <section id="contact" class="section newsletter">
         <div class="container">
 
             <div class="newsletter-card">
 
-              <h2 class="card-title">Hi, I’m Jaeseo.</h2>
-
               <p class="card-text">
-                I design and sell functional 3D prints and digital files created to solve real-world problems. Whether it's a custom tool, a specific hardware adapter, or an everyday fix, I build things that actually work.
+                Hi, I'm Jaeseo. I design and sell functional 3D solutions for real-world problems. Explore my services below:
               </p>
 
-              <p class="card-text"><strong>Digital Files:</strong> Ready-to-print STL files for your own machine.</p>
+              <table class="service-table">
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Pre-made Digital Files</td>
+                    <td>Ready-to-print models for your own machine. <a href="https://makerworld.com/en/@jaeseopark/upload" target="_blank" rel="noreferrer noopener">Browse the MakerWorld shop</a>.</td>
+                  </tr>
+                  <tr>
+                    <td>Custom Digital Files</td>
+                    <td>Tailored CAD modeling for your specific needs. Email me at ____ to start your project.</td>
+                  </tr>
+                  <tr>
+                    <td>Physical Goods</td>
+                    <td>3D-printed items shipped to you. <a href="#" target="_blank" rel="noreferrer noopener">See the Etsy catalog</a>.<sup><a href="#direct-order" class="footnote-ref">*</a></sup></td>
+                  </tr>
+                </tbody>
+              </table>
 
-              <p class="card-text"><strong>Custom Design:</strong> Bespoke CAD modeling to create specific parts you can't find elsewhere.</p>
-
-              <p class="card-text"><strong>Physical Goods:</strong> Durable, 3D-printed items shipped directly to you.</p>
-
-              <p class="card-text"><strong>Direct Orders & Custom Quotes</strong></p>
-
-              <p class="card-text">
-                I am always open to working out a deal outside of Etsy to bypass platform fees and pass those savings directly to you. For custom designs, bulk orders, or direct purchases, reach out at: [Insert Your Email Address Here]
+              <p id="direct-order" class="footnote-note">
+                <strong>*</strong> I am always open to working out a deal outside of Etsy to bypass platform fees and pass those savings directly to you.
               </p>
 
-              <p class="card-text">
-                I also provide Software Consulting for web applications and server-side development. If you have a technical project or need help with backend architecture, feel free to get in touch.
-              </p>
+            </div>
 
-              <ul class="social-list bio-social">
+        </div>
+
+
+      </section>
+
+
+    </article>
+  </main>
+
+
+
+
+  <!-- 
+    - #FOOTER
+  -->
+
+  <footer class="footer">
+
+    <div class="footer-top">
+      <div class="container">
+
+        <p class="copyright">&copy; 2026 Chamfered. All rights reserved.</p>
+
+
+           <ul class="social-list bio-social">
 
                 <li>
                   <a href="https://www.instagram.com/chamfered3d/" class="social-link" target="_blank" rel="noreferrer noopener" aria-label="Instagram">
@@ -743,27 +774,6 @@
 
               </ul>
 
-            </div>
-
-        </div>
-      </section>
-
-    </article>
-  </main>
-
-
-
-
-  <!-- 
-    - #FOOTER
-  -->
-
-  <footer id="contact" class="footer">
-
-    <div class="footer-top">
-      <div class="container">
-
-        <p class="copyright">&copy; 2026 Chamfered. All rights reserved.</p>
 
       </div>
     </div>

@@ -91,6 +91,8 @@ input,
 button,
 ion-icon { display: block; }
 
+a { display: inline; }
+
 input,
 button {
   background: none;
@@ -535,6 +537,32 @@ h3 > a { color: inherit; }
 
 .newsletter-card .card-text { margin-bottom: 30px; }
 
+.newsletter-card .service-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.newsletter-card .service-table th,
+.newsletter-card .service-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid hsla(0, 0%, 0%, 0.08);
+}
+
+.newsletter-card .service-table th {
+  color: var(--eerie-black);
+  font-weight: var(--fw-600);
+}
+
+.newsletter-card .service-table td a {
+  color: var(--middle-blue-green);
+}
+
+.newsletter-card .service-table tr:last-child td {
+  border-bottom: none;
+}
+
 .newsletter-card .input-wrapper {
   position: relative;
   margin-bottom: 20px;
@@ -915,6 +943,24 @@ h3 > a { color: inherit; }
     font-size: var(--fs-7);
     font-weight: var(--fw-500);
     padding-block: 20px;
+  }
+
+  .navbar-link.logo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-block: 0;
+  }
+
+  .navbar-link.logo-link img {
+    width: 24px;
+    height: auto;
+  }
+
+  .navbar-link.logo-link .logo-text {
+    display: inline-block;
+    font-weight: 700;
+    color: var(--eerie-black);
   }
 
   .navbar-link:is(:hover, :focus) { color: var(--middle-blue-green); }
