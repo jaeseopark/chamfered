@@ -1,0 +1,186 @@
+Chamfered - Biggest shopping center
+
+
+# HEADER
+
+alt = Chamfered logo
+
+aria-label = Open Menu
+
+aria-label = Close Menu
+
+Home
+Shop
+About
+Contact
+
+
+# HERO
+
+Ready-to-print 3D Models
+
+Download for free
+
+
+# CATEGORY
+
+alt = Sunglass & eye
+Sunglass & Eye
+
+alt = Active & outdoor
+Active & Outdoor
+
+alt = Winter wear
+Winter Wear
+
+alt = Exclusive footwear
+Exclusive Footwear
+
+alt = Jewelry
+Jewelry
+
+alt = Sports cap
+Sports Cap
+
+
+# PRODUCT
+
+Products of the week
+
+Best Seller
+Hot Collection
+Trendy
+New Arrival
+
+alt = Varsi Leather Bag
+
+-25%
+
+aria-label = Quick view
+<ion-icon name="eye-outline"></ion-icon>
+
+<ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+Add to Cart
+
+alt = Add to Whishlist
+<ion-icon name="heart-outline"></ion-icon>
+
+Varsi Leather Bag
+
+&pound;48.75
+&pound;65.00
+
+alt = Fit Twill Shirt for Woman
+
+New
+
+Fit Twill Shirt for Woman
+
+62.00
+
+alt = Grand Atlantic Chukka Boots
+
+Grand Atlantic Chukka Boots
+
+32.00
+
+alt = Women's Faux-Trim Shirt
+
+Women's Faux-Trim Shirt
+
+84.00
+
+alt = Soft Touch Interlock Polo
+
+Soft Touch Interlock Polo
+
+45.00
+
+alt = Chamfered Smart Watch
+
+Chamfered Smart Watch
+
+30.00
+38.00
+
+alt = Chamfered Smart Glass
+
+Chamfered Smart Glass
+
+25.00
+39.00
+
+alt = Cotton Shirt for Men
+
+Cotton Shirt for Men
+
+85.00
+99.00
+
+alt = Double-breasted Blazer
+
+Double-breasted Blazer
+
+32.00
+
+alt = Ribbed Cotton Bodysuits
+
+New
+
+Ribbed Cotton Bodysuits
+
+71.00
+
+View All Products
+
+
+# ABOUT
+
+Hi, I’m Jaeseo.
+
+I design and sell functional 3D prints and digital files created to solve real-world problems. Whether it's a custom tool, a specific hardware adapter, or an everyday fix, I build things that actually work.
+
+Digital Files: Ready-to-print STL files for your own machine.
+
+Custom Design: Bespoke CAD modeling to create specific parts you can't find elsewhere.
+
+Physical Goods: Durable, 3D-printed items shipped directly to you.
+
+Direct Orders & Custom Quotes
+
+I am always open to working out a deal outside of Etsy to bypass platform fees and pass those savings directly to you. For custom designs, bulk orders, or direct purchases, reach out at: [Insert Your Email Address Here]
+
+I also provide Software Consulting for web applications and server-side development. If you have a technical project or need help with backend architecture, feel free to get in touch.
+
+
+# SOCIAL
+
+Instagram: https://www.instagram.com/chamfered3d/
+
+TikTok: https://www.tiktok.com/@chamfered3d
+
+YouTube: https://www.youtube.com/@chamfered3d
+
+
+# FOOTER
+
+© 2026 Chamfered. All rights reserved.
+
+
+Help & Support
+
+Dealers & Agents
+FAQ Information
+Return Policy
+Shipping & Delivery
+Order Tranking
+List of Shops
+
+&copy; 2022 codewithsadee. All Rights Reserved
+
+Privacy Policy
+Terms & Conditions
+Sitemap
+
+We Support
+alt = online payment logos
