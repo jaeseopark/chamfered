@@ -30,3 +30,30 @@ window.addEventListener("scroll", function () {
   window.scrollY >= 200 ? header.classList.add("active")
     : header.classList.remove("active");
 })
+
+
+/**
+ * email obfuscation
+ */
+
+const emailLinks = document.querySelectorAll("a[data-email-obfuscate]");
+
+if (emailLinks.length > 0) {
+  const defaultLocalPart = [106, 97, 101, 115, 101, 111]
+    .map((code) => String.fromCharCode(code))
+    .join("");
+  const defaultDomain = [99, 104, 97, 109, 102, 101, 114, 101, 100, 46, 100, 101, 118]
+    .map((code) => String.fromCharCode(code))
+    .join("");
+
+  const subject = encodeURIComponent("Chamfered Order Inquiry");
+
+  emailLinks.forEach((link) => {
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
+
+      const emailAddress = link.dataset.email || `${defaultLocalPart}@${defaultDomain}`;
+      window.location.href = `mailto:${emailAddress}?subject=${subject}`;
+    });
+  });
+}
