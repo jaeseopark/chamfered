@@ -36,7 +36,6 @@
 
       <div class="overlay" data-overlay></div>
 
-      <span id="home"></span>
 
       <div class="header-actions">
 
@@ -92,6 +91,10 @@
 
 
   <main>
+     <p id="home" style="position: absolute; margin-top: -12rem;">
+      <!-- invisible paragraph to help tune the scroll position -->
+     </p>
+
     <article>
 
       <!-- 
@@ -101,7 +104,12 @@
       <section class="hero" style="background-image: url('./assets/images/hero-bg.jpg')">
         <div class="container">
 
+         
+
           <div class="hero-content">
+
+            
+
             <h2 class="h1 hero-title">Ready-to-print 3D Models</h2>
 
             <a href="https://makerworld.com/en/@jaeseopark/upload" class="btn btn-primary" target="_blank" rel="noreferrer noopener">Download for free</a>
@@ -124,7 +132,7 @@
         - #CATEGORY
       -->
 
-      <section class="section category">
+      <section class="section category" style="display: none;">
         <div class="container">
 
           <ul class="category-list">
@@ -196,10 +204,14 @@
         - #PRODUCT
       -->
 
-      <section id="shop" class="section product">
-        <div class="container">
+      <section  class="section product">
+        <div class="container"  >
 
-          <h2 class="h2 section-title">Products of the week</h2>
+          <h2 class="h2 section-title">Featured Products</h2>
+
+          <p id="shop" style="position: absolute; margin-top: -13rem;">
+            <!-- invisible paragraph to help tune the scroll position -->
+          </p>
 
           <ul class="filter-list">
 
@@ -695,17 +707,15 @@
 
             <div class="newsletter-card">
 
+
+          <h2 class="h2 section-title">Services</h2>
+
+
               <p class="card-text">
                 Hi, I'm Jaeseo. I design and sell functional 3D solutions for real-world problems. Explore my services below:
               </p>
 
               <table class="service-table">
-                <thead>
-                  <tr>
-                    <th>Service</th>
-                    <th>Details</th>
-                  </tr>
-                </thead>
                 <tbody>
                   <tr>
                     <td>Pre-made Digital Files</td>
