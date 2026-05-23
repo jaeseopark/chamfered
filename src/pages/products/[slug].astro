@@ -39,157 +39,125 @@ const digitalPurchaseLinks = [
     ? { href: product.data.purchase.digital.thingiverse, label: 'Download from Thingiverse', icon: 'layers-outline', accent: 'bg-[#248bfb]' }
     : null,
 ].filter((link): link is NonNullable<typeof link> => link !== null);
+const productMode = physicalPurchaseLinks.length > 0 && digitalPurchaseLinks.length > 0
+  ? 'Physical + digital'
+  : digitalPurchaseLinks.length > 0
+    ? 'Digital file'
+    : 'Physical product';
 ---
 
 <Layout title={`${product.data.title} | Chamfered`} description={pageDescription}>
   <Header />
 
-  <main class="pt-20 pb-20 bg-white min-h-[70vh]">
+  <main class="min-h-[70vh] bg-white pb-20 pt-20">
     <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <a
         href="/#shop"
-        class="inline-flex items-center gap-2 text-sm font-semibold text-[hsl(176,35%,45%)] hover:text-[hsl(176,35%,35%)] transition-colors mb-8"
+        class="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-[hsl(176,35%,45%)] transition-colors hover:text-[hsl(176,35%,35%)]"
       >
         <ion-icon name="arrow-back-outline" aria-hidden="true" />
         Back to products
       </a>
 
-      <article class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-start">
-        <div class="bg-[hsl(0,0%,97%)] rounded-xl border border-[hsl(0,0%,90%)] overflow-hidden">
-          <img
-            src={product.data.image}
-            alt={product.data.title}
-            class="w-full h-full object-cover aspect-[4/5]"
-          />
+      <article class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)] lg:gap-12">
+        <div class="space-y-6">
+          <div class="overflow-hidden rounded-[1.5rem] border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,97%)]">
+            <img
+              src={product.data.image}
+              alt={product.data.title}
+              class="aspect-[4/5] w-full object-cover"
+            />
+          </div>
+
+          <div class="rounded-[1.5rem] border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,99%)] p-6">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="inline-flex rounded-full bg-[hsl(176,35%,63%)]/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-[hsl(176,56%,28%)]">
+                {productMode}
+              </span>
+              {product.data.badge && (
+                <span class={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-white ${product.data.badgeColor === 'red' ? 'bg-[hsl(356,65%,63%)]' : 'bg-[hsl(148,45%,58%)]'}`}>
+                  {product.data.badge}
+                </span>
+              )}
+            </div>
+
+            <div class="prose prose-sm mt-5 max-w-none text-[hsl(0,0%,30%)]">
+              <Content />
+            </div>
+          </div>
         </div>
 
-        <div>
-          <h1 class="text-3xl sm:text-4xl font-bold text-[hsl(0,0%,9%)] leading-tight mb-3">
-            {product.data.title}
-          </h1>
+        <div class="lg:sticky lg:top-24">
+          <div class="rounded-[1.5rem] border border-[hsl(0,0%,90%)] bg-white p-6 shadow-sm">
+            <h1 class="text-3xl font-bold leading-tight text-[hsl(0,0%,9%)] sm:text-4xl">
+              {product.data.title}
+            </h1>
 
-          <div class="flex items-center gap-3 mb-6">
-            <p class="text-2xl font-bold text-[hsl(0,0%,9%)]">
-              ${product.data.price.toFixed(2)}
-            </p>
-            {product.data.originalPrice && (
-              <p class="text-base text-[hsl(0,0%,44%)] line-through">
-                ${product.data.originalPrice.toFixed(2)}
+            <div class="mt-4 flex items-center gap-3">
+              <p class="text-2xl font-bold text-[hsl(0,0%,9%)]">
+                ${product.data.price.toFixed(2)}
               </p>
-            )}
-            {product.data.badge && (
-              <span class={`inline-flex items-center text-xs px-2 py-1 rounded text-white ${product.data.badgeColor === 'red' ? 'bg-[hsl(356,65%,63%)]' : 'bg-[hsl(148,45%,58%)]'}`}>
-                {product.data.badge}
-              </span>
-            )}
-          </div>
+              {product.data.originalPrice && (
+                <p class="text-base text-[hsl(0,0%,44%)] line-through">
+                  ${product.data.originalPrice.toFixed(2)}
+                </p>
+              )}
+            </div>
 
-          <div class="prose prose-sm max-w-none text-[hsl(0,0%,30%)] mb-8">
-            <Content />
-          </div>
+            <div class="mt-6 rounded-2xl border border-[hsl(0,0%,92%)] bg-[hsl(0,0%,99%)] p-4 text-sm text-[hsl(0,0%,35%)]">
+              <div class="flex items-center justify-between gap-3 border-b border-[hsl(0,0%,92%)] pb-3">
+                <span class="font-medium text-[hsl(0,0%,25%)]">Format</span>
+                <span>{productMode}</span>
+              </div>
+              <div class="mt-3 flex items-center justify-between gap-3 border-b border-[hsl(0,0%,92%)] pb-3">
+                <span class="font-medium text-[hsl(0,0%,25%)]">Physical marketplaces</span>
+                <span>{physicalPurchaseLinks.length || 0}</span>
+              </div>
+              <div class="mt-3 flex items-center justify-between gap-3">
+                <span class="font-medium text-[hsl(0,0%,25%)]">Digital download links</span>
+                <span>{digitalPurchaseLinks.length || 0}</span>
+              </div>
+            </div>
 
-          <div class="flex flex-wrap items-center gap-3">
-            {physicalPurchaseLinks.map((link) => (
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noreferrer noopener"
-                class={`inline-flex items-center gap-2 ${link.accent} hover:brightness-95 text-white text-sm font-semibold px-5 py-3 rounded-full transition duration-200`}
-              >
-                <ion-icon name={link.icon} aria-hidden="true" />
-                {link.label}
-              </a>
-            ))}
+            {physicalPurchaseLinks.length > 0 && (
+              <div class="mt-8">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-[hsl(0,0%,38%)]">
+                  Buy a finished part
+                </h2>
+                <div class="mt-4 flex flex-wrap gap-3">
+                  {physicalPurchaseLinks.map((link) => (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      class={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white transition duration-200 hover:brightness-95 ${link.accent}`}
+                    >
+                      <ion-icon name={link.icon} aria-hidden="true" />
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {digitalPurchaseLinks.length > 0 && (
-              <>
+              <div class="mt-8">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-[hsl(0,0%,38%)]">
+                  Download the design
+                </h2>
+                <p class="mt-3 text-sm text-[hsl(0,0%,44%)]">
+                  Use the support prompt before revealing the available download platforms.
+                </p>
                 <button
                   type="button"
-                  class="inline-flex items-center gap-2 bg-[hsl(176,35%,63%)] hover:bg-[hsl(176,35%,50%)] text-white text-sm font-semibold px-5 py-3 rounded-full transition-colors"
+                  class="mt-4 inline-flex items-center gap-2 rounded-full bg-[hsl(176,35%,63%)] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[hsl(176,35%,50%)]"
                   data-digital-download-trigger
                   aria-haspopup="dialog"
                 >
                   <ion-icon name="download-outline" aria-hidden="true" />
-                  Download Design File
+                  Download design file
                 </button>
-
-                <dialog
-                  class="w-full max-w-md rounded-2xl border border-[hsl(0,0%,85%)] p-0 shadow-2xl backdrop:bg-black/40"
-                  data-donation-dialog
-                >
-                  <div class="p-6 sm:p-7">
-                    <div class="flex items-start justify-between gap-4 mb-4">
-                      <div>
-                        <h2 class="text-2xl font-bold text-[hsl(0,0%,9%)]">Support this design</h2>
-                      </div>
-                      <button
-                        type="button"
-                        class="rounded-full border border-[hsl(0,0%,85%)] px-3 py-1 text-sm font-medium text-[hsl(0,0%,35%)]"
-                        data-close-donation-dialog
-                      >
-                        Close
-                      </button>
-                    </div>
-
-                    <div data-donation-stage>
-                      <p class="text-sm text-[hsl(0,0%,35%)] mb-5">
-                        Would you like to support Chamfered with a donation?
-                      </p>
-
-                      <div class="flex flex-col sm:flex-row gap-3">
-                        <a
-                          href="https://www.paypal.com/donate/?hosted_button_id=FFUCZRH3R62CE"
-                          target="_blank"
-                          rel="noreferrer noopener"
-                          class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full transition duration-200 text-sm font-semibold flex-1"
-                          style="background-color: rgb(255, 209, 64); color: rgb(0, 48, 135);"
-                          data-proceed-to-downloads
-                        >
-                          <ion-icon name="logo-paypal" aria-hidden="true" />
-                          Donate
-                        </a>
-                        <button
-                          type="button"
-                          class="inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(176,35%,63%)] px-5 py-3 text-sm font-semibold text-white hover:bg-[hsl(176,35%,50%)] transition-colors flex-1"
-                          data-skip-donation
-                        >
-                          <ion-icon name="arrow-forward-outline" aria-hidden="true" />
-                          Skip
-                        </button>
-                      </div>
-                    </div>
-
-                    <div data-downloads-stage class="hidden">
-                      <p class="text-sm text-[hsl(0,0%,35%)] mb-5">
-                        Download links are available below.
-                      </p>
-
-                      <div class="flex flex-wrap items-center gap-3">
-                        {digitalPurchaseLinks.map((link) => (
-                          <a
-                            href={link.href}
-                            target="_blank"
-                            rel="noreferrer noopener"
-                            class={`inline-flex items-center gap-2 ${link.accent} hover:brightness-95 text-white text-sm font-semibold px-5 py-3 rounded-full transition duration-200`}
-                          >
-                            <ion-icon name={link.icon} aria-hidden="true" />
-                            {link.label}
-                          </a>
-                        ))}
-                      </div>
-
-                      <button
-                        type="button"
-                        class="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(0,0%,90%)] px-5 py-3 text-sm font-semibold text-[hsl(0,0%,25%)] hover:bg-[hsl(0,0%,80%)] transition-colors w-full"
-                        data-back-to-donation
-                      >
-                        <ion-icon name="arrow-back-outline" aria-hidden="true" />
-                        Back
-                      </button>
-                    </div>
-                  </div>
-                </dialog>
-              </>
+              </div>
             )}
           </div>
         </div>
@@ -198,6 +166,86 @@ const digitalPurchaseLinks = [
   </main>
 
   <Footer />
+
+  {digitalPurchaseLinks.length > 0 && (
+    <dialog
+      class="w-full max-w-md rounded-2xl border border-[hsl(0,0%,85%)] p-0 shadow-2xl"
+      data-donation-dialog
+    >
+      <div class="p-6 sm:p-7">
+        <div class="mb-4 flex items-start justify-between gap-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[hsl(176,56%,28%)]">Digital support</p>
+            <h2 class="mt-2 text-2xl font-bold text-[hsl(0,0%,9%)]">Support this design</h2>
+          </div>
+          <button
+            type="button"
+            class="rounded-full border border-[hsl(0,0%,85%)] px-3 py-1 text-sm font-medium text-[hsl(0,0%,35%)]"
+            data-close-donation-dialog
+          >
+            Close
+          </button>
+        </div>
+
+        <div data-donation-stage>
+          <p class="mb-5 text-sm text-[hsl(0,0%,35%)]">
+            Would you like to support Chamfered with a donation before downloading?
+          </p>
+
+          <div class="flex flex-col gap-3 sm:flex-row">
+            <a
+              href="https://www.paypal.com/donate/?hosted_button_id=FFUCZRH3R62CE"
+              target="_blank"
+              rel="noreferrer noopener"
+              class="inline-flex flex-1 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition duration-200"
+              style="background-color: rgb(255, 209, 64); color: rgb(0, 48, 135);"
+              data-proceed-to-downloads
+            >
+              <ion-icon name="logo-paypal" aria-hidden="true" />
+              Donate
+            </a>
+            <button
+              type="button"
+              class="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[hsl(176,35%,63%)] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[hsl(176,35%,50%)]"
+              data-skip-donation
+            >
+              <ion-icon name="arrow-forward-outline" aria-hidden="true" />
+              Skip
+            </button>
+          </div>
+        </div>
+
+        <div data-downloads-stage class="hidden">
+          <p class="mb-5 text-sm text-[hsl(0,0%,35%)]">
+            Download links are available below.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-3">
+            {digitalPurchaseLinks.map((link) => (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noreferrer noopener"
+                class={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white transition duration-200 hover:brightness-95 ${link.accent}`}
+              >
+                <ion-icon name={link.icon} aria-hidden="true" />
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[hsl(0,0%,90%)] px-5 py-3 text-sm font-semibold text-[hsl(0,0%,25%)] transition-colors hover:bg-[hsl(0,0%,80%)]"
+            data-back-to-donation
+          >
+            <ion-icon name="arrow-back-outline" aria-hidden="true" />
+            Back
+          </button>
+        </div>
+      </div>
+    </dialog>
+  )}
 </Layout>
 
 <script>
@@ -216,7 +264,6 @@ const digitalPurchaseLinks = [
     if (donationDialog.open) {
       donationDialog.close();
     }
-    // Reset to donation stage when dialog is closed
     if (donationStage instanceof HTMLElement && downloadsStage instanceof HTMLElement) {
       donationStage.classList.remove('hidden');
       downloadsStage.classList.add('hidden');
@@ -250,9 +297,7 @@ const digitalPurchaseLinks = [
   });
 
   proceedToDownloadsLinks.forEach((link) => {
-    link.addEventListener('click', (e) => {
-      // Allow the default link behavior (open in new tab)
-      // but also proceed to show downloads
+    link.addEventListener('click', () => {
       proceedToDownloads();
     });
   });
@@ -265,7 +310,6 @@ const digitalPurchaseLinks = [
     button.addEventListener('click', backToDonation);
   });
 
-  // Close dialog when clicking outside (on the backdrop)
   if (donationDialog instanceof HTMLDialogElement) {
     donationDialog.addEventListener('click', (event) => {
       if (event.target === donationDialog) {
