@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+import HeroSection from '../components/HeroSection.astro';
 import ProductCard from '../components/ProductCard.astro';
 import AboutSection from '../components/AboutSection.astro';
 import ContactSection from '../components/ContactSection.astro';
@@ -19,16 +20,45 @@ const featuredProducts = allProducts
   <Header />
 
   <main class="pt-16">
-    <!-- #PRODUCTS -->
-    <section id="shop" class="py-20 bg-white scroll-mt-16">
+    <HeroSection
+      backgroundImage="/images/hero-bg.jpg"
+      title="A modern storefront for practical 3D prints and digital files."
+      description="Browse featured Chamfered products in a polished ecommerce-style layout, then choose the right purchase or download flow straight from each product page."
+      ctaText="Shop featured products"
+      ctaHref="/products/"
+      secondaryCtaText="Start a custom project"
+      secondaryCtaHref="/#contact"
+    />
+
+    <section id="shop" class="scroll-mt-20 py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl sm:text-4xl font-bold text-[hsl(0,0%,9%)] mb-3">
-            Products
-          </h2>
-          <p class="text-[hsl(0,0%,44%)] max-w-xl mx-auto">
-            Handpicked items from Chamfered's latest 3D-printed creations and digital designs.
-          </p>
+        <div class="mb-12 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <span class="inline-flex rounded-full bg-[hsl(176,35%,63%)]/12 px-4 py-2 text-xs font-semibold uppercase tracking-[0.32em] text-[hsl(176,56%,28%)]">
+              Featured products
+            </span>
+            <h2 class="mt-5 text-3xl font-bold text-[hsl(0,0%,9%)] sm:text-4xl">
+              Template-inspired product cards with schema-aware actions.
+            </h2>
+            <p class="mt-4 max-w-2xl text-[hsl(0,0%,44%)]">
+              Handpicked items from Chamfered's latest 3D-printed creations and digital designs.
+            </p>
+          </div>
+
+          <div class="grid gap-3 rounded-[1.75rem] border border-[hsl(180,15%,88%)] bg-white/90 p-5 text-sm text-[hsl(0,0%,35%)] shadow-sm sm:grid-cols-3">
+            <div>
+              <p class="font-semibold text-[hsl(0,0%,9%)]">Physical products</p>
+              <p class="mt-1">Marketplace-ready purchase links.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-[hsl(0,0%,9%)]">Digital files</p>
+              <p class="mt-1">Download flows with optional support modal.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-[hsl(0,0%,9%)]">Custom builds</p>
+              <p class="mt-1">Direct inquiry from the contact section.</p>
+            </div>
+          </div>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
@@ -41,6 +71,8 @@ const featuredProducts = allProducts
               badgeColor={product.data.badgeColor}
               image={product.data.image}
               productHref={`/products/${product.id}/`}
+              hasPhysicalPurchase={product.data.purchase.physical !== undefined}
+              hasDigitalPurchase={product.data.purchase.digital !== undefined}
             />
           ))}
         </div>
@@ -48,7 +80,7 @@ const featuredProducts = allProducts
         <div class="mt-10 text-center">
           <a
             href="/products/"
-            class="inline-flex items-center gap-2 bg-[hsl(176,35%,63%)] hover:bg-[hsl(176,35%,50%)] text-white text-sm font-semibold px-6 py-3 rounded-full transition-colors"
+            class="inline-flex items-center gap-2 rounded-full bg-[hsl(176,35%,63%)] px-6 py-3 text-sm font-semibold text-white shadow-md hover:-translate-y-0.5 hover:bg-[hsl(176,35%,50%)] hover:shadow-lg"
           >
             See more
             <ion-icon name="arrow-forward-outline" aria-hidden="true" />

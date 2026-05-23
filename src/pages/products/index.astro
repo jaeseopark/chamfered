@@ -13,15 +13,32 @@ const products = (await getCollection('products'))
 <Layout title="Full Product Catalog | Chamfered" description="Browse the complete Chamfered product catalog.">
   <Header />
 
-  <main class="pt-20 pb-20 bg-white min-h-[70vh]">
+  <main class="min-h-[70vh] pb-20 pt-28">
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12">
-        <h1 class="text-3xl sm:text-4xl font-bold text-[hsl(0,0%,9%)] mb-3">
-          Full Product Catalog
-        </h1>
-        <p class="text-[hsl(0,0%,44%)] max-w-2xl mx-auto">
-          Browse the complete list of Chamfered products, including featured items and the full archive.
-        </p>
+      <div class="mb-12 overflow-hidden rounded-[2rem] border border-[hsl(180,15%,88%)] bg-[linear-gradient(135deg,rgba(15,23,42,0.98),rgba(15,118,110,0.92))] px-8 py-10 text-white shadow-[0_24px_70px_rgba(15,23,42,0.14)] sm:px-10">
+        <span class="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.32em] text-white/75">
+          Catalog
+        </span>
+        <div class="mt-6 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h1 class="text-3xl font-bold sm:text-4xl">
+              Full product catalog with modern marketplace and download actions.
+            </h1>
+            <p class="mt-4 max-w-2xl text-white/75">
+              Browse the complete list of Chamfered products, including featured items and the full archive.
+            </p>
+          </div>
+          <div class="grid gap-3 text-sm text-white/75 sm:grid-cols-2">
+            <div class="rounded-2xl border border-white/12 bg-white/10 p-4">
+              <p class="font-semibold text-white">Physical listings</p>
+              <p class="mt-1">eBay, Amazon, and Etsy buttons where available.</p>
+            </div>
+            <div class="rounded-2xl border border-white/12 bg-white/10 p-4">
+              <p class="font-semibold text-white">Digital downloads</p>
+              <p class="mt-1">MakerWorld, Printables, and Thingiverse support.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
@@ -34,6 +51,8 @@ const products = (await getCollection('products'))
             badgeColor={product.data.badgeColor}
             image={product.data.image}
             productHref={`/products/${product.id}/`}
+            hasPhysicalPurchase={product.data.purchase.physical !== undefined}
+            hasDigitalPurchase={product.data.purchase.digital !== undefined}
           />
         ))}
       </div>
