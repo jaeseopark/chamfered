@@ -19,9 +19,11 @@ const { Content } = await render(product);
 
 const primaryLink = product.data.ebayLink ?? product.data.makerWorldLink;
 const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.makerWorldLink ? 'Get on MakerWorld' : null;
+const [thumbnailImage, ...lightboxImages] = product.data.images;
+const lightboxIdPrefix = `lightbox-${product.id.replace(/[^a-z0-9-]/gi, '-')}`;
 ---
 
-<Layout title={`${product.data.title} | Chamfered`} description={product.body}>
+<Layout title={`${product.data.title} | Chamfered`} description={product.body ?? ''}>
   <Header />
 
   <main class="pt-20 pb-20 bg-white min-h-[70vh]">
@@ -37,7 +39,7 @@ const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.ma
       <article class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-start">
         <div class="bg-[hsl(0,0%,97%)] rounded-xl border border-[hsl(0,0%,90%)] overflow-hidden">
           <img
-            src={product.data.image}
+            src={thumbnailImage}
             alt={product.data.title}
             class="w-full h-full object-cover aspect-[4/5]"
           />
@@ -68,6 +70,28 @@ const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.ma
             <Content />
           </div>
 
+          {lightboxImages.length > 0 && (
+            <div class="mb-8">
+              <h2 class="text-sm font-semibold text-[hsl(0,0%,25%)] mb-3">More images</h2>
+              <div class="flex flex-wrap gap-3">
+                {lightboxImages.map((image, index) => (
+                  <a
+                    href={`#${lightboxIdPrefix}-${index}`}
+                    class="w-20 h-20 rounded-lg overflow-hidden border border-[hsl(0,0%,86%)] hover:border-[hsl(0,0%,70%)] transition-colors"
+                    aria-label={`Open image ${index + 2}`}
+                  >
+                    <img
+                      src={image}
+                      alt={`${product.data.title} image ${index + 2}`}
+                      class="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div class="flex flex-wrap items-center gap-3">
             {primaryLink && primaryLinkLabel && (
               <a
@@ -92,6 +116,30 @@ const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.ma
       </article>
     </section>
   </main>
+
+  {lightboxImages.map((image, index) => (
+    <div
+      id={`${lightboxIdPrefix}-${index}`}
+      class="fixed inset-0 z-50 bg-black/85 p-4 sm:p-8 opacity-0 pointer-events-none transition-opacity [&:target]:opacity-100 [&:target]:pointer-events-auto"
+    >
+      <a href="#" class="absolute inset-0" aria-label="Close image"></a>
+      <div class="relative max-w-4xl mx-auto h-full flex items-center justify-center">
+        <img
+          src={image}
+          alt={`${product.data.title} image ${index + 2}`}
+          class="max-w-full max-h-full rounded-xl shadow-2xl object-contain"
+          loading="lazy"
+        />
+        <a
+          href="#"
+          class="absolute top-2 right-2 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/90 text-[hsl(0,0%,20%)] hover:bg-white transition-colors"
+          aria-label="Close image"
+        >
+          <ion-icon name="close-outline" aria-hidden="true" />
+        </a>
+      </div>
+    </div>
+  ))}
 
   <Footer />
 </Layout>

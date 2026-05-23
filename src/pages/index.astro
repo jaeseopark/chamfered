@@ -49,10 +49,8 @@ const featuredProducts = allProducts
               originalPrice={product.data.originalPrice}
               badge={product.data.badge}
               badgeColor={product.data.badgeColor}
-              image={product.data.image}
+              image={product.data.images[0]!}
               productHref={`/products/${product.id}/`}
-              ebayLink={product.data.ebayLink}
-              makerWorldLink={product.data.makerWorldLink}
             />
           ))}
         </div>
@@ -100,4 +98,3 @@ const featuredProducts = allProducts
     }
   </script>
 </Layout>
-

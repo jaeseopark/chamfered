@@ -10,7 +10,7 @@ const products = defineCollection({
     originalPrice: z.number().optional(),
     badge: z.string().optional(),
     badgeColor: z.enum(['red', 'green']).optional(),
-    image: z.string(),
+    images: z.array(z.string()).min(1),
     ebayLink: z.url().optional(),
     makerWorldLink: z.url().optional(),
     featured: z.boolean().default(true),
