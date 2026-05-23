@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
-import { DEFAULT_DONATION_AMOUNTS, DONATION_CURRENCY, PAYPAL_DONATION_URL } from '../../consts';
+import { DEFAULT_DONATION_AMOUNTS, DONATION_CURRENCY, MIN_DONATION_AMOUNT, PAYPAL_DONATION_URL } from '../../consts';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
@@ -110,6 +110,7 @@ const digitalPurchaseLinks = [
                   data-digital-download-trigger
                   data-paypal-url={PAYPAL_DONATION_URL}
                   data-donation-currency={DONATION_CURRENCY}
+                  data-min-donation-amount={MIN_DONATION_AMOUNT}
                   aria-haspopup="dialog"
                 >
                   <ion-icon name="download-outline" aria-hidden="true" />
@@ -157,7 +158,7 @@ const digitalPurchaseLinks = [
                     <div class="flex flex-col sm:flex-row gap-3 mb-5">
                       <input
                         type="number"
-                        min="1"
+                      min={MIN_DONATION_AMOUNT}
                         step="0.01"
                         inputmode="decimal"
                         placeholder={`Custom amount (${DONATION_CURRENCY})`}
@@ -234,6 +235,9 @@ const digitalPurchaseLinks = [
   const digitalDownloadLinks = document.querySelector('[data-digital-download-links]');
   const downloadStatus = document.querySelector('[data-download-status]');
   const customDonationInput = document.querySelector('[data-custom-donation-amount]');
+  const minimumDonationAmount = Number(downloadTrigger instanceof HTMLElement
+    ? downloadTrigger.dataset.minDonationAmount
+    : undefined) || 1;
   const closeDonationDialog = () => {
     if (!(donationDialog instanceof HTMLDialogElement)) {
       return;
@@ -261,8 +265,8 @@ const digitalPurchaseLinks = [
     }
     resetCustomDonationValidity();
     const amount = Number(customDonationInput.value);
-    if (!Number.isFinite(amount) || amount < 1) {
-      customDonationInput.setCustomValidity('Please enter a donation amount of at least $1.00.');
+    if (!Number.isFinite(amount) || amount < minimumDonationAmount) {
+      customDonationInput.setCustomValidity(`Please enter a donation amount of at least $${minimumDonationAmount.toFixed(2)}.`);
       customDonationInput.reportValidity();
       return null;
     }
@@ -319,11 +323,6 @@ const digitalPurchaseLinks = [
   customDonationButton?.addEventListener('click', () => {
     const amount = getCustomDonationAmount();
     if (amount === null) {
-      if (customDonationInput instanceof HTMLInputElement) {
-        return;
-      }
-      revealDownloads('Download links are ready below.');
-      closeDonationDialog();
       return;
     }
     openPayPalDonation(amount);
