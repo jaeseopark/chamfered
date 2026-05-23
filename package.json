@@ -2,11 +2,23 @@
   "name": "chamfered",
   "version": "0.0.0",
   "private": true,
-  "description": "Static website served locally with a no-dependency npm script.",
+  "description": "Static ecommerce website built with Astro, TypeScript, and Tailwind CSS.",
   "scripts": {
-    "dev": "vite"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
   },
   "devDependencies": {
-    "vite": "^5.4.0"
+    "@astrojs/check": "^0.9.9",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^6.3.7",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^6.0.3",
+    "zod": "^4.4.3"
+  },
+  "overrides": {
+    "vite": "^7.3.3",
+    "yaml": "^2.8.3"
   }
 }
