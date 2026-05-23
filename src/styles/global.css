@@ -13,6 +13,12 @@
   --font-jost: "Jost", sans-serif;
 }
 
+:root {
+  --landing-hero-background:
+    radial-gradient(circle at top left, rgba(45, 212, 191, 0.3), transparent 30%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(15, 118, 110, 0.8));
+}
+
 * {
   margin: 0;
   padding: 0;
