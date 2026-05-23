@@ -17,7 +17,7 @@ const {
   secondaryCtaText,
   secondaryCtaHref,
 } = Astro.props;
-const isPrimaryExternal = /^https?:\/\//.test(ctaHref);
+const isPrimaryCTAExternal = /^https?:\/\//.test(ctaHref);
 ---
 
 <section
@@ -39,11 +39,11 @@ const isPrimaryExternal = /^https?:\/\//.test(ctaHref);
         <a
           href={ctaHref}
           class="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3 text-base font-semibold text-[hsl(176,56%,28%)] shadow-lg hover:-translate-y-0.5 hover:shadow-xl"
-          target={isPrimaryExternal ? '_blank' : undefined}
-          rel={isPrimaryExternal ? 'noreferrer noopener' : undefined}
+          target={isPrimaryCTAExternal ? '_blank' : undefined}
+          rel={isPrimaryCTAExternal ? 'noreferrer noopener' : undefined}
         >
           {ctaText}
-          <ion-icon name={isPrimaryExternal ? 'open-outline' : 'arrow-forward-outline'} aria-hidden="true" />
+          <ion-icon name={isPrimaryCTAExternal ? 'open-outline' : 'arrow-forward-outline'} aria-hidden="true" />
         </a>
         {secondaryCtaText && secondaryCtaHref && (
           <a
