@@ -24,7 +24,8 @@ if (!thumbnailImage) {
   throw new Error(`Product "${product.id}" is missing a required thumbnail image.`);
 }
 const MAX_META_DESCRIPTION_LENGTH = 160;
-const lightboxIdPrefix = `lightbox-${product.id.replace(/[^a-z0-9-]/gi, '-')}`;
+const totalImageCount = lightboxImages.length + 1;
+const lightboxIdPrefix = `lightbox-${product.id.replace(/[^a-z0-9-]/gi, '-').replace(/-+/g, '-')}`;
 const metaDescription = (product.body ?? '')
   .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
   .replace(/```[\s\S]*?```/g, ' ')
@@ -92,7 +93,7 @@ const metaDescription = (product.body ?? '')
                     <a
                       href={`#${lightboxIdPrefix}-${index}`}
                       class="w-20 h-20 rounded-lg overflow-hidden border border-[hsl(0,0%,86%)] hover:border-[hsl(0,0%,70%)] transition-colors"
-                      aria-label={`View image ${imageNumber} of ${product.data.images.length} for ${product.data.title}`}
+                      aria-label={`View image ${imageNumber} of ${totalImageCount} for ${product.data.title}`}
                     >
                       <img
                         src={image}
