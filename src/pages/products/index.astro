@@ -34,8 +34,6 @@ const products = (await getCollection('products'))
             badgeColor={product.data.badgeColor}
             image={product.data.image}
             productHref={`/products/${product.id}/`}
-            ebayLink={product.data.ebayLink}
-            makerWorldLink={product.data.makerWorldLink}
           />
         ))}
       </div>

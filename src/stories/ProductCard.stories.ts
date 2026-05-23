@@ -11,7 +11,6 @@ export const WithEbayLink = {
     title: 'Custom Ergonomic Desk Riser',
     price: 45.0,
     image: '/images/product-1.jpg',
-    ebayLink: 'https://www.ebay.com/itm/123456',
   },
 };
 
@@ -20,7 +19,6 @@ export const WithMakerWorldLink = {
     title: 'Parametric Cable Holder',
     price: 0,
     image: '/images/product-10.jpg',
-    makerWorldLink: 'https://makerworld.com/en/models/123456',
   },
 };
 
@@ -32,7 +30,6 @@ export const OnSaleWithRedBadge = {
     badge: 'Sale',
     badgeColor: 'red' as const,
     image: '/images/product-1.jpg',
-    ebayLink: 'https://www.ebay.com/itm/123456',
   },
 };
 
@@ -43,7 +40,6 @@ export const NewWithGreenBadge = {
     badge: 'New',
     badgeColor: 'green' as const,
     image: '/images/product-10.jpg',
-    makerWorldLink: 'https://makerworld.com/en/models/654321',
   },
 };
 

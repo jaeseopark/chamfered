@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { DEFAULT_DONATION_AMOUNTS, DONATION_CURRENCY, PAYPAL_DONATION_URL } from '../../consts';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
@@ -16,12 +17,32 @@ export async function getStaticPaths() {
 
 const { product } = Astro.props;
 const { Content } = await render(product);
-
-const primaryLink = product.data.ebayLink ?? product.data.makerWorldLink;
-const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.makerWorldLink ? 'Get on MakerWorld' : null;
+const pageDescription = product.body?.trim() || `${product.data.title} by Chamfered.`;
+const physicalPurchaseLinks = [
+  product.data.purchase.physical?.ebay
+    ? { href: product.data.purchase.physical.ebay, label: 'Buy on eBay', icon: 'pricetag-outline', accent: 'bg-[#e53238]' }
+    : null,
+  product.data.purchase.physical?.amazon
+    ? { href: product.data.purchase.physical.amazon, label: 'Buy on Amazon', icon: 'logo-amazon', accent: 'bg-[#ff9900]' }
+    : null,
+  product.data.purchase.physical?.etsy
+    ? { href: product.data.purchase.physical.etsy, label: 'Buy on Etsy', icon: 'bag-handle-outline', accent: 'bg-[#f1641e]' }
+    : null,
+].filter((link): link is NonNullable<typeof link> => link !== null);
+const digitalPurchaseLinks = [
+  product.data.purchase.digital?.makerworld
+    ? { href: product.data.purchase.digital.makerworld, label: 'Download from MakerWorld', icon: 'cube-outline', accent: 'bg-[#0f766e]' }
+    : null,
+  product.data.purchase.digital?.printables
+    ? { href: product.data.purchase.digital.printables, label: 'Download from Printables', icon: 'print-outline', accent: 'bg-[#fa6831]' }
+    : null,
+  product.data.purchase.digital?.thingiverse
+    ? { href: product.data.purchase.digital.thingiverse, label: 'Download from Thingiverse', icon: 'layers-outline', accent: 'bg-[#248bfb]' }
+    : null,
+].filter((link): link is NonNullable<typeof link> => link !== null);
 ---
 
-<Layout title={`${product.data.title} | Chamfered`} description={product.body}>
+<Layout title={`${product.data.title} | Chamfered`} description={pageDescription}>
   <Header />
 
   <main class="pt-20 pb-20 bg-white min-h-[70vh]">
@@ -69,16 +90,126 @@ const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.ma
           </div>
 
           <div class="flex flex-wrap items-center gap-3">
-            {primaryLink && primaryLinkLabel && (
+            {physicalPurchaseLinks.map((link) => (
               <a
-                href={primaryLink}
+                href={link.href}
                 target="_blank"
                 rel="noreferrer noopener"
-                class="inline-flex items-center gap-2 bg-[hsl(176,35%,63%)] hover:bg-[hsl(176,35%,50%)] text-white text-sm font-semibold px-5 py-3 rounded-full transition-colors"
+                class={`inline-flex items-center gap-2 ${link.accent} hover:brightness-95 text-white text-sm font-semibold px-5 py-3 rounded-full transition duration-200`}
               >
-                <ion-icon name="open-outline" aria-hidden="true" />
-                {primaryLinkLabel}
+                <ion-icon name={link.icon} aria-hidden="true" />
+                {link.label}
               </a>
+            ))}
+
+            {digitalPurchaseLinks.length > 0 && (
+              <>
+                <button
+                  type="button"
+                  class="inline-flex items-center gap-2 bg-[hsl(176,35%,63%)] hover:bg-[hsl(176,35%,50%)] text-white text-sm font-semibold px-5 py-3 rounded-full transition-colors"
+                  data-digital-download-trigger
+                  data-paypal-url={PAYPAL_DONATION_URL}
+                  aria-haspopup="dialog"
+                >
+                  <ion-icon name="download-outline" aria-hidden="true" />
+                  Download Design File
+                </button>
+
+                <dialog
+                  class="w-full max-w-md rounded-2xl border border-[hsl(0,0%,85%)] p-0 shadow-2xl backdrop:bg-black/40"
+                  data-donation-dialog
+                >
+                  <div class="p-6 sm:p-7">
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                      <div>
+                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-[hsl(176,35%,45%)] mb-2">
+                          Optional donation
+                        </p>
+                        <h2 class="text-2xl font-bold text-[hsl(0,0%,9%)]">Support this design</h2>
+                      </div>
+                      <button
+                        type="button"
+                        class="rounded-full border border-[hsl(0,0%,85%)] px-3 py-1 text-sm font-medium text-[hsl(0,0%,35%)]"
+                        data-close-donation-dialog
+                      >
+                        Close
+                      </button>
+                    </div>
+
+                    <p class="text-sm text-[hsl(0,0%,35%)] mb-5">
+                      If you'd like, you can send a quick PayPal tip before downloading. You can also skip and go straight to the design files.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                      {DEFAULT_DONATION_AMOUNTS.map((amount) => (
+                        <button
+                          type="button"
+                          class="inline-flex items-center justify-center gap-2 rounded-full border border-[hsl(0,0%,86%)] px-4 py-3 text-sm font-semibold text-[hsl(0,0%,18%)] hover:border-[hsl(176,35%,50%)] hover:text-[hsl(176,35%,40%)] transition-colors"
+                          data-donation-amount={amount}
+                        >
+                          <ion-icon name="logo-paypal" aria-hidden="true" />
+                          Donate ${amount}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 mb-5">
+                      <input
+                        type="number"
+                        min="1"
+                        step="0.01"
+                        inputmode="decimal"
+                        placeholder="Custom amount (USD)"
+                        class="w-full rounded-full border border-[hsl(0,0%,86%)] px-4 py-3 text-sm text-[hsl(0,0%,18%)] focus:outline-none focus:border-[hsl(176,35%,50%)]"
+                        data-custom-donation-amount
+                      />
+                      <button
+                        type="button"
+                        class="inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(0,0%,9%)] px-5 py-3 text-sm font-semibold text-white hover:bg-[hsl(0,0%,18%)] transition-colors"
+                        data-custom-donation-submit
+                      >
+                        <ion-icon name="logo-paypal" aria-hidden="true" />
+                        Donate
+                      </button>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3">
+                      <button
+                        type="button"
+                        class="inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(176,35%,63%)] px-5 py-3 text-sm font-semibold text-white hover:bg-[hsl(176,35%,50%)] transition-colors"
+                        data-skip-donation
+                      >
+                        <ion-icon name="arrow-forward-outline" aria-hidden="true" />
+                        Skip to download
+                      </button>
+                      <p class="self-center text-sm text-[hsl(0,0%,45%)]">
+                        Currency: {DONATION_CURRENCY}
+                      </p>
+                    </div>
+                  </div>
+                </dialog>
+
+                <div class="hidden basis-full" data-digital-download-links>
+                  <div class="mt-2 rounded-2xl border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] p-4 sm:p-5">
+                    <p class="text-sm text-[hsl(0,0%,35%)] mb-4" data-download-status>
+                      Download links are ready below.
+                    </p>
+                    <div class="flex flex-wrap items-center gap-3">
+                      {digitalPurchaseLinks.map((link) => (
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          class={`inline-flex items-center gap-2 ${link.accent} hover:brightness-95 text-white text-sm font-semibold px-5 py-3 rounded-full transition duration-200`}
+                        >
+                          <ion-icon name={link.icon} aria-hidden="true" />
+                          {link.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
 
             <a
@@ -95,3 +226,87 @@ const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.ma
 
   <Footer />
 </Layout>
+
+<script>
+  const downloadTrigger = document.querySelector('[data-digital-download-trigger]');
+  const donationDialog = document.querySelector('[data-donation-dialog]');
+  const digitalDownloadLinks = document.querySelector('[data-digital-download-links]');
+  const downloadStatus = document.querySelector('[data-download-status]');
+  const customDonationInput = document.querySelector('[data-custom-donation-amount]');
+  const closeDonationDialog = () => {
+    if (donationDialog instanceof HTMLDialogElement && donationDialog.open) {
+      donationDialog.close();
+    }
+  };
+  const revealDownloads = (message: string) => {
+    if (digitalDownloadLinks instanceof HTMLElement) {
+      digitalDownloadLinks.classList.remove('hidden');
+    }
+    if (downloadStatus instanceof HTMLElement) {
+      downloadStatus.textContent = message;
+    }
+  };
+  const openPayPalDonation = (amount: number) => {
+    if (!(downloadTrigger instanceof HTMLElement)) {
+      revealDownloads('Download links are ready below.');
+      return;
+    }
+    const paypalUrl = downloadTrigger.dataset['paypalUrl'];
+    if (!paypalUrl) {
+      revealDownloads('Download links are ready below.');
+      return;
+    }
+    const donationUrl = new URL(paypalUrl);
+    donationUrl.searchParams.set('amount', amount.toFixed(2));
+    donationUrl.searchParams.set('currency_code', 'USD');
+    window.open(donationUrl.toString(), '_blank', 'noopener,noreferrer');
+    revealDownloads('Thanks for supporting Chamfered — your PayPal donation page opened in a new tab.');
+  };
+
+  if (downloadTrigger instanceof HTMLButtonElement) {
+    downloadTrigger.addEventListener('click', () => {
+      if (donationDialog instanceof HTMLDialogElement) {
+        donationDialog.showModal();
+        return;
+      }
+      revealDownloads('Download links are ready below.');
+    });
+  }
+
+  document.querySelectorAll('[data-close-donation-dialog]').forEach((button) => {
+    button.addEventListener('click', closeDonationDialog);
+  });
+
+  document.querySelectorAll('[data-donation-amount]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const amount = Number(button.getAttribute('data-donation-amount'));
+      if (!Number.isFinite(amount) || amount <= 0) {
+        return;
+      }
+      openPayPalDonation(amount);
+      closeDonationDialog();
+    });
+  });
+
+  const customDonationButton = document.querySelector('[data-custom-donation-submit]');
+  customDonationButton?.addEventListener('click', () => {
+    if (!(customDonationInput instanceof HTMLInputElement)) {
+      revealDownloads('Download links are ready below.');
+      closeDonationDialog();
+      return;
+    }
+    const amount = Number(customDonationInput.value);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      customDonationInput.reportValidity();
+      return;
+    }
+    openPayPalDonation(amount);
+    closeDonationDialog();
+  });
+
+  const skipDonationButton = document.querySelector('[data-skip-donation]');
+  skipDonationButton?.addEventListener('click', () => {
+    revealDownloads('Download links are ready below.');
+    closeDonationDialog();
+  });
+</script>
