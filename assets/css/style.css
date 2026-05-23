@@ -543,77 +543,123 @@ h3 > a { color: inherit; }
 
 
 /*-----------------------------------*\
- * #NEWSLATTER
+ * #ABOUT
 \*-----------------------------------*/
 
-.newsletter { padding-bottom: 120px; }
+.about { padding-bottom: 60px; }
 
-.newsletter-card {
+.about-card {
   background-color: var(--cultured);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: left;
-  padding: 80px 15px;
-  text-align: center;
-}
-
-.newsletter-card .card-title {
-  color: var(--eerie-black);
-  font-size: var(--fs-3);
-  font-weight: var(--fw-500);
-  line-height: 1.2;
-  margin-bottom: 30px;
-}
-
-.newsletter-card .card-text { margin-bottom: 30px; }
-
-.newsletter-card .service-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 30px;
-  text-align: left;
-}
-
-.newsletter-card .service-table th,
-.newsletter-card .service-table td {
-  padding: 14px 16px;
-  border-bottom: 1px solid hsla(0, 0%, 0%, 0.08);
-}
-
-.newsletter-card .service-table th {
-  color: var(--eerie-black);
-  font-weight: var(--fw-600);
-}
-
-.newsletter-card .service-table td a {
-  color: var(--middle-blue-green);
-}
-
-.newsletter-card .service-table tr:last-child td {
-  border-bottom: none;
-}
-
-.newsletter-card .input-wrapper {
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.newsletter-card .input-field {
-  background: var(--white);
-  height: 60px;
-  padding-inline: 50px 20px;
+  padding: 60px 30px;
   border-radius: 6px;
 }
 
-.newsletter-card .input-wrapper ion-icon {
-  font-size: 18px;
-  position: absolute;
-  top: 50%;
-  left: 25px;
-  transform: translateY(-50%);
+.about-intro {
+  margin-bottom: 30px;
+  line-height: 1.7;
+  max-width: 720px;
+  margin-inline: auto;
+  text-align: center;
 }
 
-.newsletter-card .btn { gap: 10px; }
+.about-services-list {
+  list-style: none;
+  max-width: 680px;
+  margin-inline: auto;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.about-services-list li {
+  padding: 16px 20px;
+  background: var(--white);
+  border-radius: 6px;
+  border-left: 4px solid var(--middle-blue-green);
+  line-height: 1.6;
+}
+
+.about-services-list li strong {
+  color: var(--eerie-black);
+}
+
+.about-services-list li a {
+  color: var(--middle-blue-green);
+  text-decoration: underline;
+}
+
+.about-services-list li a:is(:hover, :focus) {
+  color: var(--eerie-black);
+}
+
+.about-consulting {
+  max-width: 680px;
+  margin-inline: auto;
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--white);
+  border-radius: 6px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.about-consulting strong {
+  color: var(--eerie-black);
+}
+
+.footnote-note {
+  max-width: 680px;
+  margin-inline: auto;
+  font-size: var(--fs-10);
+  color: var(--sonic-silver);
+  line-height: 1.6;
+}
+
+.footnote-note a {
+  color: var(--middle-blue-green);
+}
+
+.footnote-ref {
+  color: var(--middle-blue-green);
+  font-size: var(--fs-10);
+}
+
+
+/*-----------------------------------*\
+ * #CONTACT
+\*-----------------------------------*/
+
+.contact { padding-bottom: 120px; }
+
+.contact-card {
+  background-color: var(--cultured);
+  padding: 60px 30px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.contact-card .card-text {
+  margin-bottom: 30px;
+  max-width: 480px;
+  margin-inline: auto;
+  line-height: 1.7;
+}
+
+.contact-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.contact-actions .btn {
+  gap: 10px;
+}
+
+.contact-social {
+  justify-content: center;
+  gap: 12px;
+}
 
 
 
@@ -808,31 +854,6 @@ h3 > a { color: inherit; }
    * BLOG
    */
 
-
-
-
-  /**
-   * NEWSLETTER
-   */
-
-  .newsletter-card > * {
-    max-width: 480px;
-    margin-inline: auto;
-  }
-
-  .newsletter-card .card-form { position: relative; }
-
-  .newsletter-card .input-wrapper { margin-bottom: 0; }
-
-  .newsletter-card .btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: max-content;
-    padding-inline: 35px;
-    border-radius: 0 6px 6px 0;
-  }
 
 
 
@@ -1041,13 +1062,12 @@ h3 > a { color: inherit; }
 
 
 
-  /**
-   * NEWSLETTER
-   */
-
-  .newsletter-card .card-form { max-width: 650px; }
-
 }
+
+
+
+
+
 
 
 
