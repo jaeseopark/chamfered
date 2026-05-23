@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 
 const { product } = Astro.props;
 const { Content } = await render(product);
-const pageDescription = product.body?.trim() || `${product.data.title} by Chamfered.`;
+const pageDescription = product.body?.trim() || `${product.data.title} by Chamfered`;
 const physicalPurchaseLinks = [
   product.data.purchase.physical?.ebay
     ? { href: product.data.purchase.physical.ebay, label: 'Buy on eBay', icon: 'pricetag-outline', accent: 'bg-[#e53238]' }
@@ -255,6 +255,19 @@ const digitalPurchaseLinks = [
       customDonationInput.setCustomValidity('');
     }
   };
+  const getCustomDonationAmount = () => {
+    if (!(customDonationInput instanceof HTMLInputElement)) {
+      return null;
+    }
+    resetCustomDonationValidity();
+    const amount = Number(customDonationInput.value);
+    if (!Number.isFinite(amount) || amount < 1) {
+      customDonationInput.setCustomValidity('Please enter a donation amount of at least $1.00.');
+      customDonationInput.reportValidity();
+      return null;
+    }
+    return amount;
+  };
   customDonationInput?.addEventListener('input', resetCustomDonationValidity);
   const openPayPalDonation = (amount: number) => {
     if (!(downloadTrigger instanceof HTMLElement)) {
@@ -304,18 +317,15 @@ const digitalPurchaseLinks = [
 
   const customDonationButton = document.querySelector('[data-custom-donation-submit]');
   customDonationButton?.addEventListener('click', () => {
-    if (!(customDonationInput instanceof HTMLInputElement)) {
+    const amount = getCustomDonationAmount();
+    if (amount === null) {
+      if (customDonationInput instanceof HTMLInputElement) {
+        return;
+      }
       revealDownloads('Download links are ready below.');
       closeDonationDialog();
       return;
     }
-    const amount = Number(customDonationInput.value);
-    if (!Number.isFinite(amount) || amount <= 0) {
-      customDonationInput.setCustomValidity('Enter a donation amount greater than 0.');
-      customDonationInput.reportValidity();
-      return;
-    }
-    resetCustomDonationValidity();
     openPayPalDonation(amount);
     closeDonationDialog();
   });

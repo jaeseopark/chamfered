@@ -3,7 +3,7 @@ import { glob } from 'astro/loaders';
 import { z } from 'zod';
 
 const hasAtLeastOneLink = (links: Record<string, string | undefined>) =>
-  Object.values(links).some((link) => typeof link === 'string' && link.length > 0);
+  Object.values(links).some((link) => link !== undefined && link !== '');
 
 const physicalPurchaseSchema = z.object({
   ebay: z.url().optional(),
