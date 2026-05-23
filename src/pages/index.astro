@@ -49,7 +49,7 @@ const featuredProducts = allProducts
               originalPrice={product.data.originalPrice}
               badge={product.data.badge}
               badgeColor={product.data.badgeColor}
-              image={product.data.images[0]!}
+              image={product.data.images[0] ?? '/images/logo.svg'}
               productHref={`/products/${product.id}/`}
             />
           ))}
