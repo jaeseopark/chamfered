@@ -19,11 +19,17 @@ const { Content } = await render(product);
 
 const primaryLink = product.data.ebayLink ?? product.data.makerWorldLink;
 const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.makerWorldLink ? 'Get on MakerWorld' : null;
-const [thumbnailImage, ...lightboxImages] = product.data.images;
+const productImages = product.data.images.length > 0 ? product.data.images : ['/images/logo.svg'];
+const [thumbnailImage, ...lightboxImages] = productImages;
 const lightboxIdPrefix = `lightbox-${product.id.replace(/[^a-z0-9-]/gi, '-')}`;
+const metaDescription = (product.body ?? '')
+  .replace(/[#*_`>\-\[\]\(\)]/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .slice(0, 160);
 ---
 
-<Layout title={`${product.data.title} | Chamfered`} description={product.data.title}>
+<Layout title={`${product.data.title} | Chamfered`} description={metaDescription || product.data.title}>
   <Header />
 
   <main class="pt-20 pb-20 bg-white min-h-[70vh]">
