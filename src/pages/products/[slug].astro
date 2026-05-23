@@ -23,7 +23,7 @@ const [thumbnailImage, ...lightboxImages] = product.data.images;
 const lightboxIdPrefix = `lightbox-${product.id.replace(/[^a-z0-9-]/gi, '-')}`;
 ---
 
-<Layout title={`${product.data.title} | Chamfered`} description={product.body ?? ''}>
+<Layout title={`${product.data.title} | Chamfered`} description={product.data.title}>
   <Header />
 
   <main class="pt-20 pb-20 bg-white min-h-[70vh]">
@@ -78,7 +78,7 @@ const lightboxIdPrefix = `lightbox-${product.id.replace(/[^a-z0-9-]/gi, '-')}`;
                   <a
                     href={`#${lightboxIdPrefix}-${index}`}
                     class="w-20 h-20 rounded-lg overflow-hidden border border-[hsl(0,0%,86%)] hover:border-[hsl(0,0%,70%)] transition-colors"
-                    aria-label={`View larger image ${index + 2} for ${product.data.title}`}
+                    aria-label={`View larger additional image ${index + 1} for ${product.data.title}`}
                   >
                     <img
                       src={image}
