@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import HeroSection from '../components/HeroSection.astro';
+import ProductCard from '../components/ProductCard.astro';
+import AboutSection from '../components/AboutSection.astro';
+import ContactSection from '../components/ContactSection.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+// Fetch and sort products from content collection
+const allProducts = await getCollection('products');
+const featuredProducts = allProducts
+  .filter((product) => product.data.featured || product.data.badge === 'New')
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+
+<Layout>
+  <Header />
+
+  <main class="pt-16">
+
+    <HeroSection
+      backgroundImage="/images/hero-bg.jpg"
+      title="Ready-to-print 3D Models"
+      ctaText="Download for free"
+      ctaHref="https://makerworld.com/en/@jaeseopark/upload"
+    />
+
+
+    <!-- #PRODUCTS -->
+    <section id="shop" class="py-20 bg-white scroll-mt-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl sm:text-4xl font-bold text-[hsl(0,0%,9%)] mb-3">
+            Products
+          </h2>
+          <p class="text-[hsl(0,0%,44%)] max-w-xl mx-auto">
+            Handpicked items from Chamfered's latest 3D-printed creations and digital designs.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
+          {featuredProducts.map((product) => (
+            <ProductCard
+              title={product.data.title}
+              price={product.data.price}
+              originalPrice={product.data.originalPrice}
+              badge={product.data.badge}
+              badgeColor={product.data.badgeColor}
+              image={product.data.image}
+              productHref={`/products/${product.id}/`}
+              ebayLink={product.data.ebayLink}
+              makerWorldLink={product.data.makerWorldLink}
+            />
+          ))}
+        </div>
+
+        <div class="mt-10 text-center">
+          <a
+            href="/products/"
+            class="inline-flex items-center gap-2 bg-[hsl(176,35%,63%)] hover:bg-[hsl(176,35%,50%)] text-white text-sm font-semibold px-6 py-3 rounded-full transition-colors"
+          >
+            See more
+            <ion-icon name="arrow-forward-outline" aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <AboutSection />
+
+    <ContactSection />
+
+  </main>
+
+  <Footer />
+
+  <!-- Email obfuscation script -->
+  <script>
+    const emailLinks = document.querySelectorAll('a[data-email-obfuscate]');
+    if (emailLinks.length > 0) {
+      const defaultLocalPart = [106, 97, 101, 115, 101, 111]
+        .map((code) => String.fromCharCode(code))
+        .join('');
+      const defaultDomain = [99, 104, 97, 109, 102, 101, 114, 101, 100, 46, 100, 101, 118]
+        .map((code) => String.fromCharCode(code))
+        .join('');
+      const subject = encodeURIComponent('Chamfered Order Inquiry');
+      emailLinks.forEach((link) => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          const anchor = link as HTMLAnchorElement;
+          const emailAddress = anchor.dataset['email'] ?? `${defaultLocalPart}@${defaultDomain}`;
+          window.location.href = `mailto:${emailAddress}?subject=${subject}`;
+        });
+      });
+    }
+  </script>
+</Layout>
+

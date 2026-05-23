@@ -1,0 +1,97 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import '../../styles/global.css';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+
+  return products.map((product) => ({
+    params: { slug: product.id },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const { Content } = await render(product);
+
+const primaryLink = product.data.ebayLink ?? product.data.makerWorldLink;
+const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.makerWorldLink ? 'Get on MakerWorld' : null;
+---
+
+<Layout title={`${product.data.title} | Chamfered`} description={product.body}>
+  <Header />
+
+  <main class="pt-20 pb-20 bg-white min-h-[70vh]">
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a
+        href="/#shop"
+        class="inline-flex items-center gap-2 text-sm font-semibold text-[hsl(176,35%,45%)] hover:text-[hsl(176,35%,35%)] transition-colors mb-8"
+      >
+        <ion-icon name="arrow-back-outline" aria-hidden="true" />
+        Back to products
+      </a>
+
+      <article class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-start">
+        <div class="bg-[hsl(0,0%,97%)] rounded-xl border border-[hsl(0,0%,90%)] overflow-hidden">
+          <img
+            src={product.data.image}
+            alt={product.data.title}
+            class="w-full h-full object-cover aspect-[4/5]"
+          />
+        </div>
+
+        <div>
+          <h1 class="text-3xl sm:text-4xl font-bold text-[hsl(0,0%,9%)] leading-tight mb-3">
+            {product.data.title}
+          </h1>
+
+          <div class="flex items-center gap-3 mb-6">
+            <p class="text-2xl font-bold text-[hsl(0,0%,9%)]">
+              ${product.data.price.toFixed(2)}
+            </p>
+            {product.data.originalPrice && (
+              <p class="text-base text-[hsl(0,0%,44%)] line-through">
+                ${product.data.originalPrice.toFixed(2)}
+              </p>
+            )}
+            {product.data.badge && (
+              <span class={`inline-flex items-center text-xs px-2 py-1 rounded text-white ${product.data.badgeColor === 'red' ? 'bg-[hsl(356,65%,63%)]' : 'bg-[hsl(148,45%,58%)]'}`}>
+                {product.data.badge}
+              </span>
+            )}
+          </div>
+
+          <div class="prose prose-sm max-w-none text-[hsl(0,0%,30%)] mb-8">
+            <Content />
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3">
+            {primaryLink && primaryLinkLabel && (
+              <a
+                href={primaryLink}
+                target="_blank"
+                rel="noreferrer noopener"
+                class="inline-flex items-center gap-2 bg-[hsl(176,35%,63%)] hover:bg-[hsl(176,35%,50%)] text-white text-sm font-semibold px-5 py-3 rounded-full transition-colors"
+              >
+                <ion-icon name="open-outline" aria-hidden="true" />
+                {primaryLinkLabel}
+              </a>
+            )}
+
+            <a
+              href="/#shop"
+              class="inline-flex items-center gap-2 text-sm font-semibold border border-[hsl(0,0%,86%)] text-[hsl(0,0%,25%)] hover:border-[hsl(0,0%,70%)] px-5 py-3 rounded-full transition-colors"
+            >
+              Browse more products
+            </a>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,82 @@
+---
+interface Props {
+  title: string;
+  price: number;
+  originalPrice?: number | undefined;
+  badge?: string | undefined;
+  badgeColor?: 'red' | 'green' | undefined;
+  image: string;
+  productHref?: string | undefined;
+  ebayLink?: string | undefined;
+  makerWorldLink?: string | undefined;
+}
+
+const {
+  title,
+  price,
+  originalPrice,
+  badge,
+  badgeColor = 'green',
+  image,
+  productHref,
+  ebayLink,
+  makerWorldLink,
+} = Astro.props;
+
+const badgeBg = badgeColor === 'red' ? 'bg-[hsl(356,65%,63%)]' : 'bg-[hsl(148,45%,58%)]';
+
+const internalLink = productHref ?? '#';
+const hasInternalLink = internalLink !== '#';
+const internalLinkLabel = 'View Product';
+---
+
+<div class="group relative bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 border border-[hsl(0,0%,90%)]">
+  <!-- Image -->
+  <div class="relative overflow-hidden aspect-[4/5] bg-[hsl(0,0%,96%)]">
+    <a href={internalLink}>
+      <img
+        src={image}
+        alt={title}
+        loading="lazy"
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+      />
+    </a>
+
+    <!-- Badge -->
+    {badge && (
+      <span class={`absolute top-3 left-3 ${badgeBg} text-white text-xs font-semibold px-2 py-1 rounded`}>
+        {badge}
+      </span>
+    )}
+
+    <!-- Hover overlay with CTA -->
+    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-end justify-center pb-4 opacity-0 group-hover:opacity-100 pointer-events-none">
+      <a
+        href={internalLink}
+        class="bg-[hsl(176,35%,63%)] hover:bg-[hsl(176,35%,50%)] text-white text-sm font-semibold px-5 py-2 rounded-full transition-colors duration-200 flex items-center gap-2 shadow-md pointer-events-auto"
+      >
+        {!hasInternalLink && <ion-icon name="alert-circle-outline" aria-hidden="true" />}
+        {internalLinkLabel}
+      </a>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="p-4">
+    <h3 class="font-semibold text-[hsl(0,0%,9%)] text-sm mb-2 line-clamp-2">
+      <a
+        href={internalLink}
+        class="hover:text-[hsl(176,35%,50%)] transition-colors"
+      >
+        {title}
+      </a>
+    </h3>
+
+    <div class="flex items-center gap-2">
+      <span class="font-bold text-[hsl(0,0%,9%)]">${price.toFixed(2)}</span>
+      {originalPrice && (
+        <span class="text-sm text-[hsl(0,0%,44%)] line-through">${originalPrice.toFixed(2)}</span>
+      )}
+    </div>
+  </div>
+</div>
