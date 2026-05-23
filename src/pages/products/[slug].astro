@@ -19,11 +19,13 @@ const { Content } = await render(product);
 
 const primaryLink = product.data.ebayLink ?? product.data.makerWorldLink;
 const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.makerWorldLink ? 'Get on MakerWorld' : null;
-const productImages = product.data.images.length > 0 ? product.data.images : ['/images/logo.svg'];
-const [thumbnailImage, ...lightboxImages] = productImages;
+const [thumbnailImage, ...lightboxImages] = product.data.images;
+if (!thumbnailImage) {
+  throw new Error(`Product "${product.id}" is missing a required thumbnail image.`);
+}
 const lightboxIdPrefix = `lightbox-${product.id.replace(/[^a-z0-9-]/gi, '-')}`;
 const metaDescription = (product.body ?? '')
-  .replace(/[#*_`>\-\[\]\(\)]/g, ' ')
+  .replace(/[#*_`>\[\]()-]/g, ' ')
   .replace(/\s+/g, ' ')
   .trim()
   .slice(0, 160);
@@ -84,7 +86,7 @@ const metaDescription = (product.body ?? '')
                   <a
                     href={`#${lightboxIdPrefix}-${index}`}
                     class="w-20 h-20 rounded-lg overflow-hidden border border-[hsl(0,0%,86%)] hover:border-[hsl(0,0%,70%)] transition-colors"
-                    aria-label={`View larger additional image ${index + 1} for ${product.data.title}`}
+                    aria-label={`View image ${index + 2} of ${product.data.title}`}
                   >
                     <img
                       src={image}

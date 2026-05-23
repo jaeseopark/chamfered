@@ -25,17 +25,23 @@ const products = (await getCollection('products'))
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
-        {products.map((product) => (
-          <ProductCard
-            title={product.data.title}
-            price={product.data.price}
-            originalPrice={product.data.originalPrice}
-            badge={product.data.badge}
-            badgeColor={product.data.badgeColor}
-            image={product.data.images[0] ?? '/images/logo.svg'}
-            productHref={`/products/${product.id}/`}
-          />
-        ))}
+        {products.map((product) => {
+          const [thumbnailImage] = product.data.images;
+          if (!thumbnailImage) {
+            throw new Error(`Product "${product.id}" is missing a required thumbnail image.`);
+          }
+          return (
+            <ProductCard
+              title={product.data.title}
+              price={product.data.price}
+              originalPrice={product.data.originalPrice}
+              badge={product.data.badge}
+              badgeColor={product.data.badgeColor}
+              image={thumbnailImage}
+              productHref={`/products/${product.id}/`}
+            />
+          );
+        })}
       </div>
     </section>
   </main>
