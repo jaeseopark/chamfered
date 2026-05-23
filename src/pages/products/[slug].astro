@@ -26,6 +26,9 @@ if (!thumbnailImage) {
 const MAX_META_DESCRIPTION_LENGTH = 160;
 const lightboxIdPrefix = `lightbox-${product.id.replace(/[^a-z0-9-]/gi, '-')}`;
 const metaDescription = (product.body ?? '')
+  .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+  .replace(/```[\s\S]*?```/g, ' ')
+  .replace(/`[^`]*`/g, ' ')
   .replace(/[#*_`>\[\]()-]/g, ' ')
   .replace(/\s+/g, ' ')
   .trim()
@@ -83,20 +86,23 @@ const metaDescription = (product.body ?? '')
             <div class="mb-8">
               <h2 class="text-sm font-semibold text-[hsl(0,0%,25%)] mb-3">More images</h2>
               <div class="flex flex-wrap gap-3">
-                {lightboxImages.map((image, index) => (
-                  <a
-                    href={`#${lightboxIdPrefix}-${index}`}
-                    class="w-20 h-20 rounded-lg overflow-hidden border border-[hsl(0,0%,86%)] hover:border-[hsl(0,0%,70%)] transition-colors"
-                    aria-label={`View image ${index + 2} of ${product.data.images.length} for ${product.data.title}`}
-                  >
-                    <img
-                      src={image}
-                      alt={`Additional product photo of ${product.data.title}`}
-                      class="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  </a>
-                ))}
+                {lightboxImages.map((image, index) => {
+                  const imageNumber = index + 2;
+                  return (
+                    <a
+                      href={`#${lightboxIdPrefix}-${index}`}
+                      class="w-20 h-20 rounded-lg overflow-hidden border border-[hsl(0,0%,86%)] hover:border-[hsl(0,0%,70%)] transition-colors"
+                      aria-label={`View image ${imageNumber} of ${product.data.images.length} for ${product.data.title}`}
+                    >
+                      <img
+                        src={image}
+                        alt={`Additional product photo of ${product.data.title}`}
+                        class="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </a>
+                  );
+                })}
               </div>
             </div>
           )}
