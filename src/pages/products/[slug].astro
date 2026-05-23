@@ -23,12 +23,13 @@ const [thumbnailImage, ...lightboxImages] = product.data.images;
 if (!thumbnailImage) {
   throw new Error(`Product "${product.id}" is missing a required thumbnail image.`);
 }
+const MAX_META_DESCRIPTION_LENGTH = 160;
 const lightboxIdPrefix = `lightbox-${product.id.replace(/[^a-z0-9-]/gi, '-')}`;
 const metaDescription = (product.body ?? '')
   .replace(/[#*_`>\[\]()-]/g, ' ')
   .replace(/\s+/g, ' ')
   .trim()
-  .slice(0, 160);
+  .slice(0, MAX_META_DESCRIPTION_LENGTH);
 ---
 
 <Layout title={`${product.data.title} | Chamfered`} description={metaDescription || product.data.title}>
@@ -86,7 +87,7 @@ const metaDescription = (product.body ?? '')
                   <a
                     href={`#${lightboxIdPrefix}-${index}`}
                     class="w-20 h-20 rounded-lg overflow-hidden border border-[hsl(0,0%,86%)] hover:border-[hsl(0,0%,70%)] transition-colors"
-                    aria-label={`View image ${index + 2} of ${product.data.title}`}
+                    aria-label={`View image ${index + 2} of ${product.data.images.length} for ${product.data.title}`}
                   >
                     <img
                       src={image}
