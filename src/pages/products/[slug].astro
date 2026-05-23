@@ -177,6 +177,15 @@ const digitalPurchaseLinks = [
                           </a>
                         ))}
                       </div>
+
+                      <button
+                        type="button"
+                        class="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(0,0%,90%)] px-5 py-3 text-sm font-semibold text-[hsl(0,0%,25%)] hover:bg-[hsl(0,0%,80%)] transition-colors w-full"
+                        data-back-to-donation
+                      >
+                        <ion-icon name="arrow-back-outline" aria-hidden="true" />
+                        Back
+                      </button>
                     </div>
                   </div>
                 </dialog>
@@ -198,6 +207,7 @@ const digitalPurchaseLinks = [
   const downloadsStage = document.querySelector('[data-downloads-stage]');
   const proceedToDownloadsLinks = document.querySelectorAll('[data-proceed-to-downloads]');
   const skipDonationButtons = document.querySelectorAll('[data-skip-donation]');
+  const backToDonationButtons = document.querySelectorAll('[data-back-to-donation]');
 
   const closeDonationDialog = () => {
     if (!(donationDialog instanceof HTMLDialogElement)) {
@@ -217,6 +227,13 @@ const digitalPurchaseLinks = [
     if (donationStage instanceof HTMLElement && downloadsStage instanceof HTMLElement) {
       donationStage.classList.add('hidden');
       downloadsStage.classList.remove('hidden');
+    }
+  };
+
+  const backToDonation = () => {
+    if (donationStage instanceof HTMLElement && downloadsStage instanceof HTMLElement) {
+      donationStage.classList.remove('hidden');
+      downloadsStage.classList.add('hidden');
     }
   };
 
@@ -243,4 +260,17 @@ const digitalPurchaseLinks = [
   skipDonationButtons.forEach((button) => {
     button.addEventListener('click', proceedToDownloads);
   });
+
+  backToDonationButtons.forEach((button) => {
+    button.addEventListener('click', backToDonation);
+  });
+
+  // Close dialog when clicking outside (on the backdrop)
+  if (donationDialog instanceof HTMLDialogElement) {
+    donationDialog.addEventListener('click', (event) => {
+      if (event.target === donationDialog) {
+        closeDonationDialog();
+      }
+    });
+  }
 </script>
