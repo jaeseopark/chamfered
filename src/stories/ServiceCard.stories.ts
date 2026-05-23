@@ -12,7 +12,7 @@ export const DigitalFiles = {
     title: 'Digital Files',
     slots: {
       default:
-        'Ready-to-print STL files for your own machine. <a href="https://makerworld.com" target="_blank" rel="noopener">Browse the MakerWorld shop</a>.',
+        'Ready-to-print STL files for your own machine.',
     },
   },
 };
@@ -34,7 +34,7 @@ export const PhysicalGoods = {
     title: 'Physical Goods',
     slots: {
       default:
-        'Durable, 3D-printed items shipped directly to you. <a href="#" target="_blank">See the Etsy catalog</a>.',
+        'Durable, 3D-printed items shipped directly to you.',
     },
   },
 };
