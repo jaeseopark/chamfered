@@ -24,9 +24,10 @@ const {
 } = Astro.props;
 
 const badgeBg = badgeColor === 'red' ? 'bg-[hsl(356,65%,63%)]' : 'bg-[hsl(148,45%,58%)]';
-const internalLink = productHref ?? '#';
+const missingLinkHref = '#';
+const internalLink = productHref ?? missingLinkHref;
 let internalLinkLabel = 'View product';
-if (internalLink === '#') {
+if (internalLink === missingLinkHref) {
   internalLinkLabel = 'Coming soon';
 } else if (hasDigitalPurchase && hasPhysicalPurchase) {
   internalLinkLabel = 'Shop + download';
