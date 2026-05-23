@@ -11,7 +11,8 @@ import '../styles/global.css';
 
 // Fetch and sort products from content collection
 const allProducts = await getCollection('products');
-const products = allProducts
+const featuredProducts = allProducts
+  .filter((product) => product.data.featured || product.data.badge === 'New')
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 ---
 
@@ -28,12 +29,12 @@ const products = allProducts
     />
 
 
-    <!-- #PRODUCTS OF THE WEEK -->
+    <!-- #PRODUCTS -->
     <section id="shop" class="py-20 bg-white scroll-mt-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
           <h2 class="text-3xl sm:text-4xl font-bold text-[hsl(0,0%,9%)] mb-3">
-            Products of the Week
+            Products
           </h2>
           <p class="text-[hsl(0,0%,44%)] max-w-xl mx-auto">
             Handpicked items from Chamfered's latest 3D-printed creations and digital designs.
@@ -41,7 +42,7 @@ const products = allProducts
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
-          {products.map((product) => (
+          {featuredProducts.map((product) => (
             <ProductCard
               title={product.data.title}
               price={product.data.price}
@@ -49,10 +50,21 @@ const products = allProducts
               badge={product.data.badge}
               badgeColor={product.data.badgeColor}
               image={product.data.image}
+              productHref={`/products/${product.id}/`}
               ebayLink={product.data.ebayLink}
               makerWorldLink={product.data.makerWorldLink}
             />
           ))}
+        </div>
+
+        <div class="mt-10 text-center">
+          <a
+            href="/products/"
+            class="inline-flex items-center gap-2 bg-[hsl(176,35%,63%)] hover:bg-[hsl(176,35%,50%)] text-white text-sm font-semibold px-6 py-3 rounded-full transition-colors"
+          >
+            See more
+            <ion-icon name="arrow-forward-outline" aria-hidden="true" />
+          </a>
         </div>
       </div>
     </section>

@@ -19,7 +19,7 @@ export const WithMakerWorldLink = {
   args: {
     title: 'Parametric Cable Holder',
     price: 0,
-    image: '/images/product-2.jpg',
+    image: '/images/product-10.jpg',
     makerWorldLink: 'https://makerworld.com/en/models/123456',
   },
 };
@@ -31,7 +31,7 @@ export const OnSaleWithRedBadge = {
     originalPrice: 24.0,
     badge: 'Sale',
     badgeColor: 'red' as const,
-    image: '/images/product-3.jpg',
+    image: '/images/product-1.jpg',
     ebayLink: 'https://www.ebay.com/itm/123456',
   },
 };
@@ -42,7 +42,7 @@ export const NewWithGreenBadge = {
     price: 12.0,
     badge: 'New',
     badgeColor: 'green' as const,
-    image: '/images/product-4.jpg',
+    image: '/images/product-10.jpg',
     makerWorldLink: 'https://makerworld.com/en/models/654321',
   },
 };
@@ -51,6 +51,6 @@ export const NoLink = {
   args: {
     title: 'Coming Soon Item',
     price: 0,
-    image: '/images/product-5.jpg',
+    image: '/images/product-1.jpg',
   },
 };

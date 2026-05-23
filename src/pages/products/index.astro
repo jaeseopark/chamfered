@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Footer from '../../components/Footer.astro';
+import '../../styles/global.css';
+
+const products = (await getCollection('products'))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+
+<Layout title="Full Product Catalog | Chamfered" description="Browse the complete Chamfered product catalog.">
+  <Header />
+
+  <main class="pt-20 pb-20 bg-white min-h-[70vh]">
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h1 class="text-3xl sm:text-4xl font-bold text-[hsl(0,0%,9%)] mb-3">
+          Full Product Catalog
+        </h1>
+        <p class="text-[hsl(0,0%,44%)] max-w-2xl mx-auto">
+          Browse the complete list of Chamfered products, including featured items and the full archive.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
+        {products.map((product) => (
+          <ProductCard
+            title={product.data.title}
+            price={product.data.price}
+            originalPrice={product.data.originalPrice}
+            badge={product.data.badge}
+            badgeColor={product.data.badgeColor}
+            image={product.data.image}
+            productHref={`/products/${product.id}/`}
+            ebayLink={product.data.ebayLink}
+            makerWorldLink={product.data.makerWorldLink}
+          />
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
