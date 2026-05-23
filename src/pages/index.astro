@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import HeroSection from '../components/HeroSection.astro';
 import ProductCard from '../components/ProductCard.astro';
 import AboutSection from '../components/AboutSection.astro';
 import ContactSection from '../components/ContactSection.astro';
@@ -20,15 +19,6 @@ const featuredProducts = allProducts
   <Header />
 
   <main class="pt-16">
-
-    <HeroSection
-      backgroundImage="/images/hero-bg.jpg"
-      title="Ready-to-print 3D Models"
-      ctaText="Download for free"
-      ctaHref="https://makerworld.com/en/@jaeseopark/upload"
-    />
-
-
     <!-- #PRODUCTS -->
     <section id="shop" class="py-20 bg-white scroll-mt-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,4 +90,3 @@ const featuredProducts = allProducts
     }
   </script>
 </Layout>
-
