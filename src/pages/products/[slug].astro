@@ -16,12 +16,32 @@ export async function getStaticPaths() {
 
 const { product } = Astro.props;
 const { Content } = await render(product);
-
-const primaryLink = product.data.ebayLink ?? product.data.makerWorldLink;
-const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.makerWorldLink ? 'Get on MakerWorld' : null;
+const pageDescription = product.body?.trim() || `${product.data.title} by Chamfered`;
+const physicalPurchaseLinks = [
+  product.data.purchase.physical?.ebay
+    ? { href: product.data.purchase.physical.ebay, label: 'Buy on eBay', icon: 'pricetag-outline', accent: 'bg-[#e53238]' }
+    : null,
+  product.data.purchase.physical?.amazon
+    ? { href: product.data.purchase.physical.amazon, label: 'Buy on Amazon', icon: 'logo-amazon', accent: 'bg-[#ff9900]' }
+    : null,
+  product.data.purchase.physical?.etsy
+    ? { href: product.data.purchase.physical.etsy, label: 'Buy on Etsy', icon: 'bag-handle-outline', accent: 'bg-[#f1641e]' }
+    : null,
+].filter((link): link is NonNullable<typeof link> => link !== null);
+const digitalPurchaseLinks = [
+  product.data.purchase.digital?.makerworld
+    ? { href: product.data.purchase.digital.makerworld, label: 'Download from MakerWorld', icon: 'cube-outline', accent: 'bg-[#0f766e]' }
+    : null,
+  product.data.purchase.digital?.printables
+    ? { href: product.data.purchase.digital.printables, label: 'Download from Printables', icon: 'print-outline', accent: 'bg-[#fa6831]' }
+    : null,
+  product.data.purchase.digital?.thingiverse
+    ? { href: product.data.purchase.digital.thingiverse, label: 'Download from Thingiverse', icon: 'layers-outline', accent: 'bg-[#248bfb]' }
+    : null,
+].filter((link): link is NonNullable<typeof link> => link !== null);
 ---
 
-<Layout title={`${product.data.title} | Chamfered`} description={product.body}>
+<Layout title={`${product.data.title} | Chamfered`} description={pageDescription}>
   <Header />
 
   <main class="pt-20 pb-20 bg-white min-h-[70vh]">
@@ -69,24 +89,108 @@ const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.ma
           </div>
 
           <div class="flex flex-wrap items-center gap-3">
-            {primaryLink && primaryLinkLabel && (
+            {physicalPurchaseLinks.map((link) => (
               <a
-                href={primaryLink}
+                href={link.href}
                 target="_blank"
                 rel="noreferrer noopener"
-                class="inline-flex items-center gap-2 bg-[hsl(176,35%,63%)] hover:bg-[hsl(176,35%,50%)] text-white text-sm font-semibold px-5 py-3 rounded-full transition-colors"
+                class={`inline-flex items-center gap-2 ${link.accent} hover:brightness-95 text-white text-sm font-semibold px-5 py-3 rounded-full transition duration-200`}
               >
-                <ion-icon name="open-outline" aria-hidden="true" />
-                {primaryLinkLabel}
+                <ion-icon name={link.icon} aria-hidden="true" />
+                {link.label}
               </a>
-            )}
+            ))}
 
-            <a
-              href="/#shop"
-              class="inline-flex items-center gap-2 text-sm font-semibold border border-[hsl(0,0%,86%)] text-[hsl(0,0%,25%)] hover:border-[hsl(0,0%,70%)] px-5 py-3 rounded-full transition-colors"
-            >
-              Browse more products
-            </a>
+            {digitalPurchaseLinks.length > 0 && (
+              <>
+                <button
+                  type="button"
+                  class="inline-flex items-center gap-2 bg-[hsl(176,35%,63%)] hover:bg-[hsl(176,35%,50%)] text-white text-sm font-semibold px-5 py-3 rounded-full transition-colors"
+                  data-digital-download-trigger
+                  aria-haspopup="dialog"
+                >
+                  <ion-icon name="download-outline" aria-hidden="true" />
+                  Download Design File
+                </button>
+
+                <dialog
+                  class="w-full max-w-md rounded-2xl border border-[hsl(0,0%,85%)] p-0 shadow-2xl backdrop:bg-black/40"
+                  data-donation-dialog
+                >
+                  <div class="p-6 sm:p-7">
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                      <div>
+                        <h2 class="text-2xl font-bold text-[hsl(0,0%,9%)]">Support this design</h2>
+                      </div>
+                      <button
+                        type="button"
+                        class="rounded-full border border-[hsl(0,0%,85%)] px-3 py-1 text-sm font-medium text-[hsl(0,0%,35%)]"
+                        data-close-donation-dialog
+                      >
+                        Close
+                      </button>
+                    </div>
+
+                    <div data-donation-stage>
+                      <p class="text-sm text-[hsl(0,0%,35%)] mb-5">
+                        Would you like to support Chamfered with a donation?
+                      </p>
+
+                      <div class="flex flex-col sm:flex-row gap-3">
+                        <a
+                          href="https://www.paypal.com/donate/?hosted_button_id=FFUCZRH3R62CE"
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full transition duration-200 text-sm font-semibold flex-1"
+                          style="background-color: rgb(255, 209, 64); color: rgb(0, 48, 135);"
+                          data-proceed-to-downloads
+                        >
+                          <ion-icon name="logo-paypal" aria-hidden="true" />
+                          Donate
+                        </a>
+                        <button
+                          type="button"
+                          class="inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(176,35%,63%)] px-5 py-3 text-sm font-semibold text-white hover:bg-[hsl(176,35%,50%)] transition-colors flex-1"
+                          data-skip-donation
+                        >
+                          <ion-icon name="arrow-forward-outline" aria-hidden="true" />
+                          Skip
+                        </button>
+                      </div>
+                    </div>
+
+                    <div data-downloads-stage class="hidden">
+                      <p class="text-sm text-[hsl(0,0%,35%)] mb-5">
+                        Download links are available below.
+                      </p>
+
+                      <div class="flex flex-wrap items-center gap-3">
+                        {digitalPurchaseLinks.map((link) => (
+                          <a
+                            href={link.href}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            class={`inline-flex items-center gap-2 ${link.accent} hover:brightness-95 text-white text-sm font-semibold px-5 py-3 rounded-full transition duration-200`}
+                          >
+                            <ion-icon name={link.icon} aria-hidden="true" />
+                            {link.label}
+                          </a>
+                        ))}
+                      </div>
+
+                      <button
+                        type="button"
+                        class="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(0,0%,90%)] px-5 py-3 text-sm font-semibold text-[hsl(0,0%,25%)] hover:bg-[hsl(0,0%,80%)] transition-colors w-full"
+                        data-back-to-donation
+                      >
+                        <ion-icon name="arrow-back-outline" aria-hidden="true" />
+                        Back
+                      </button>
+                    </div>
+                  </div>
+                </dialog>
+              </>
+            )}
           </div>
         </div>
       </article>
@@ -95,3 +199,78 @@ const primaryLinkLabel = product.data.ebayLink ? 'Buy on eBay' : product.data.ma
 
   <Footer />
 </Layout>
+
+<script>
+  const downloadTrigger = document.querySelector('[data-digital-download-trigger]');
+  const donationDialog = document.querySelector('[data-donation-dialog]');
+  const donationStage = document.querySelector('[data-donation-stage]');
+  const downloadsStage = document.querySelector('[data-downloads-stage]');
+  const proceedToDownloadsLinks = document.querySelectorAll('[data-proceed-to-downloads]');
+  const skipDonationButtons = document.querySelectorAll('[data-skip-donation]');
+  const backToDonationButtons = document.querySelectorAll('[data-back-to-donation]');
+
+  const closeDonationDialog = () => {
+    if (!(donationDialog instanceof HTMLDialogElement)) {
+      return;
+    }
+    if (donationDialog.open) {
+      donationDialog.close();
+    }
+    // Reset to donation stage when dialog is closed
+    if (donationStage instanceof HTMLElement && downloadsStage instanceof HTMLElement) {
+      donationStage.classList.remove('hidden');
+      downloadsStage.classList.add('hidden');
+    }
+  };
+
+  const proceedToDownloads = () => {
+    if (donationStage instanceof HTMLElement && downloadsStage instanceof HTMLElement) {
+      donationStage.classList.add('hidden');
+      downloadsStage.classList.remove('hidden');
+    }
+  };
+
+  const backToDonation = () => {
+    if (donationStage instanceof HTMLElement && downloadsStage instanceof HTMLElement) {
+      donationStage.classList.remove('hidden');
+      downloadsStage.classList.add('hidden');
+    }
+  };
+
+  if (downloadTrigger instanceof HTMLButtonElement) {
+    downloadTrigger.addEventListener('click', () => {
+      if (donationDialog instanceof HTMLDialogElement) {
+        donationDialog.showModal();
+      }
+    });
+  }
+
+  document.querySelectorAll('[data-close-donation-dialog]').forEach((button) => {
+    button.addEventListener('click', closeDonationDialog);
+  });
+
+  proceedToDownloadsLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      // Allow the default link behavior (open in new tab)
+      // but also proceed to show downloads
+      proceedToDownloads();
+    });
+  });
+
+  skipDonationButtons.forEach((button) => {
+    button.addEventListener('click', proceedToDownloads);
+  });
+
+  backToDonationButtons.forEach((button) => {
+    button.addEventListener('click', backToDonation);
+  });
+
+  // Close dialog when clicking outside (on the backdrop)
+  if (donationDialog instanceof HTMLDialogElement) {
+    donationDialog.addEventListener('click', (event) => {
+      if (event.target === donationDialog) {
+        closeDonationDialog();
+      }
+    });
+  }
+</script>

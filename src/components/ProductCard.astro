@@ -7,8 +7,6 @@ interface Props {
   badgeColor?: 'red' | 'green' | undefined;
   image: string;
   productHref?: string | undefined;
-  ebayLink?: string | undefined;
-  makerWorldLink?: string | undefined;
 }
 
 const {
@@ -19,8 +17,6 @@ const {
   badgeColor = 'green',
   image,
   productHref,
-  ebayLink,
-  makerWorldLink,
 } = Astro.props;
 
 const badgeBg = badgeColor === 'red' ? 'bg-[hsl(356,65%,63%)]' : 'bg-[hsl(148,45%,58%)]';
