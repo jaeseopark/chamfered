@@ -1,0 +1,121 @@
+import { isExternalUrl } from '../utils/links';
+
+interface Props {
+  backgroundImage: string;
+  title: string;
+  description?: string;
+  ctaText: string;
+  ctaHref: string;
+  secondaryCtaText?: string;
+  secondaryCtaHref?: string;
+}
+
+export default function HeroSection({
+  backgroundImage,
+  title,
+  description = 'Browse practical 3D prints, downloadable files, and custom fabrication work through a storefront inspired by modern e-commerce landing pages.',
+  ctaText,
+  ctaHref,
+  secondaryCtaText,
+  secondaryCtaHref,
+}: Props) {
+  const isPrimaryCTAExternal = isExternalUrl(ctaHref);
+
+  return (
+    <section
+      id="home"
+      className="relative isolate overflow-hidden px-4 pb-16 pt-28 sm:px-6 lg:px-8"
+    >
+      <div className="mx-auto grid min-h-[calc(100vh-9rem)] max-w-7xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="relative z-10 max-w-2xl">
+          <span className="mb-5 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/80 backdrop-blur">
+            Chamfered storefront
+          </span>
+          <h1 className="text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
+            {title}
+          </h1>
+          <p className="mt-6 max-w-xl text-base leading-7 text-white/78 sm:text-lg">
+            {description}
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a
+              href={ctaHref}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3 text-base font-semibold text-[hsl(176,56%,28%)] shadow-lg hover:-translate-y-0.5 hover:shadow-xl"
+              target={isPrimaryCTAExternal ? '_blank' : undefined}
+              rel={isPrimaryCTAExternal ? 'noreferrer noopener' : undefined}
+            >
+              {ctaText}
+              <ion-icon
+                name={isPrimaryCTAExternal ? 'open-outline' : 'arrow-forward-outline'}
+                aria-hidden="true"
+              />
+            </a>
+            {secondaryCtaText && secondaryCtaHref && (
+              <a
+                href={secondaryCtaHref}
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-3 text-base font-semibold text-white backdrop-blur hover:bg-white/15"
+              >
+                {secondaryCtaText}
+                <ion-icon name="arrow-forward-outline" aria-hidden="true" />
+              </a>
+            )}
+          </div>
+
+          <dl className="mt-10 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-3xl border border-white/12 bg-white/10 p-4 backdrop-blur">
+              <dt className="text-xs uppercase tracking-[0.3em] text-white/60">Formats</dt>
+              <dd className="mt-2 text-lg font-semibold text-white">Printed + digital</dd>
+            </div>
+            <div className="rounded-3xl border border-white/12 bg-white/10 p-4 backdrop-blur">
+              <dt className="text-xs uppercase tracking-[0.3em] text-white/60">Built for</dt>
+              <dd className="mt-2 text-lg font-semibold text-white">Everyday utility</dd>
+            </div>
+            <div className="rounded-3xl border border-white/12 bg-white/10 p-4 backdrop-blur">
+              <dt className="text-xs uppercase tracking-[0.3em] text-white/60">Custom work</dt>
+              <dd className="mt-2 text-lg font-semibold text-white">Available</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div className="relative z-10 hidden lg:block">
+          <div className="rounded-[2rem] border border-white/15 bg-white/10 p-6 shadow-2xl backdrop-blur-xl">
+            <div className="overflow-hidden rounded-[1.5rem] border border-white/15">
+              <img
+                src={backgroundImage}
+                alt=""
+                className="h-[28rem] w-full object-cover"
+              />
+            </div>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl bg-white/90 p-4 text-[hsl(0,0%,9%)]">
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[hsl(176,56%,28%)]">
+                  Physical
+                </p>
+                <p className="mt-2 text-sm text-[hsl(0,0%,35%)]">
+                  Shop ready-to-ship parts across marketplace listings.
+                </p>
+              </div>
+              <div className="rounded-2xl bg-[hsl(176,35%,63%)]/95 p-4 text-white">
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/75">
+                  Digital
+                </p>
+                <p className="mt-2 text-sm text-white/90">
+                  Offer guided downloads and support links from the product schema.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="absolute inset-0 -z-20"
+        style={{ backgroundImage: 'var(--landing-hero-background)' }}
+      />
+      <div
+        className="absolute inset-y-0 right-0 -z-10 hidden w-1/2 bg-cover bg-center opacity-30 lg:block"
+        style={{ backgroundImage: `url('${backgroundImage}')` }}
+      />
+    </section>
+  );
+}

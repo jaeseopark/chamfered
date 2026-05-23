@@ -1,9 +1,9 @@
-import type { StorybookConfig } from '@storybook-astro/framework';
+import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
   framework: {
-    name: '@storybook-astro/framework',
+    name: '@storybook/react-vite',
     options: {},
   },
   addons: ['@storybook/addon-docs', '@storybook/addon-a11y'],

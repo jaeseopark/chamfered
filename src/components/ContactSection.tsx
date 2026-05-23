@@ -1,0 +1,77 @@
+export default function ContactSection() {
+  return (
+    <section id="contact" className="scroll-mt-20 py-20">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="overflow-hidden rounded-[2rem] border border-[hsl(180,15%,88%)] bg-[linear-gradient(135deg,rgba(15,23,42,0.96),rgba(15,118,110,0.9))] p-8 text-center shadow-[0_24px_70px_rgba(15,23,42,0.14)] sm:p-10">
+          <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.32em] text-white/75">
+            Contact
+          </span>
+          <h2 className="mt-5 text-3xl font-bold text-white sm:text-4xl">
+            Need a custom part or project quote?
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-white/75">
+            Have a question, a custom order request, or want to work together? Reach out and I'll
+            help map the right physical or digital delivery option.
+          </p>
+
+          <div className="mb-10 mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a
+              href="#"
+              data-email-obfuscate
+              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3 font-semibold text-[hsl(176,56%,28%)] shadow-md hover:-translate-y-0.5 hover:shadow-xl"
+            >
+              <ion-icon name="mail-outline" aria-hidden="true" />
+              Send an Email
+            </a>
+          </div>
+
+          <ul className="flex flex-wrap items-center justify-center gap-4">
+            <li>
+              <a
+                href="https://www.instagram.com/chamfered3d/"
+                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium text-white/85 hover:bg-white/15 hover:text-white"
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Instagram"
+              >
+                <ion-icon name="logo-instagram" style={{ fontSize: '1.5rem' }} />
+                <span>Instagram</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.tiktok.com/@chamfered3d"
+                className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium text-white/85 hover:bg-white/15 hover:text-white"
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="TikTok"
+              >
+                <img
+                  src="/images/tiktok.svg"
+                  alt=""
+                  aria-hidden="true"
+                  width="24"
+                  height="24"
+                  className="brightness-0 invert opacity-80 transition-opacity group-hover:opacity-100"
+                />
+                <span>TikTok</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.youtube.com/@chamfered3d"
+                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium text-white/85 hover:bg-white/15 hover:text-white"
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="YouTube"
+              >
+                <ion-icon name="logo-youtube" style={{ fontSize: '1.5rem' }} />
+                <span>YouTube</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -2,34 +2,38 @@
   "name": "chamfered",
   "version": "0.0.0",
   "private": true,
-  "description": "Static ecommerce website built with Astro, TypeScript, and Tailwind CSS.",
+  "description": "Static ecommerce website built with React, TypeScript, and Tailwind CSS.",
   "engines": {
     "node": "^24.0.0"
   },
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "check": "astro check",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "check": "tsc --noEmit",
     "storybook": "storybook dev --port 6006",
     "build-storybook": "storybook build"
   },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "gray-matter": "^4.0.3",
+    "marked": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router": "^7.0.0"
+  },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
-    "@storybook-astro/framework": "^1.2.0",
-    "@storybook-astro/renderer": "^1.2.0",
-    "@storybook/addon-a11y": "^10.4.1",
-    "@storybook/addon-docs": "^10.4.1",
-    "@storybook/builder-vite": "^10.4.1",
+    "@storybook/addon-a11y": "^8.6.18",
+    "@storybook/addon-docs": "^8.6.18",
+    "@storybook/react-vite": "^8.6.18",
     "@tailwindcss/vite": "^4.3.0",
-    "astro": "^6.3.7",
-    "storybook": "^10.4.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.5.0",
+    "storybook": "^8.6.18",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3",
+    "vite": "^6.0.0",
     "zod": "^4.4.3"
-  },
-  "overrides": {
-    "vite": "^7.3.3",
-    "yaml": "^2.8.3"
   }
 }
