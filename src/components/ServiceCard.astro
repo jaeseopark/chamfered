@@ -6,14 +6,12 @@ interface Props {
 const { icon, title } = Astro.props;
 ---
 
-<div class="rounded-[1.5rem] border border-[hsl(180,15%,88%)] bg-white p-6 shadow-sm">
-  <div class="mb-4 inline-flex rounded-2xl bg-[hsl(176,35%,63%)]/12 p-3 text-[hsl(176,56%,28%)]">
-    <ion-icon name={icon} aria-hidden="true" class="text-xl" />
-  </div>
-  <h3 class="font-semibold text-[hsl(0,0%,9%)] mb-2 flex items-center gap-2 text-lg">
+<div class="bg-white rounded-lg p-6 border-l-4 border-[hsl(176,35%,63%)] shadow-sm">
+  <h3 class="font-semibold text-[hsl(0,0%,9%)] mb-2 flex items-center gap-2">
+    <ion-icon name={icon} aria-hidden="true" class="text-[hsl(176,35%,63%)]" />
     {title}
   </h3>
-  <p class="text-sm text-[hsl(0,0%,38%)] leading-relaxed">
+  <p class="text-sm text-[hsl(0,0%,44%)] leading-relaxed">
     <slot />
   </p>
 </div>

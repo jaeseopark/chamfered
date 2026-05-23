@@ -2,72 +2,56 @@
 import ServiceCard from './ServiceCard.astro';
 ---
 
-<section id="about" class="scroll-mt-20 py-20">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="rounded-[2rem] border border-[hsl(180,15%,88%)] bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)] backdrop-blur sm:p-10">
-      <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-        <div>
-          <span class="inline-flex rounded-full bg-[hsl(176,35%,63%)]/12 px-4 py-2 text-xs font-semibold uppercase tracking-[0.32em] text-[hsl(176,56%,28%)]">
-            About Chamfered
-          </span>
-          <h2 class="mt-5 text-3xl font-bold text-[hsl(0,0%,9%)] sm:text-4xl">
-            Products engineered for useful, everyday results.
-          </h2>
-          <p class="mt-5 text-base leading-8 text-[hsl(0,0%,32%)]">
-            Hi, I'm Jaeseo. I design and sell functional 3D prints and digital files created to solve
-            real-world problems. Whether it's a custom tool, a specific hardware adapter, or an
-            everyday fix, I build things that actually work.
-          </p>
-          <p class="mt-6 text-sm leading-7 text-[hsl(0,0%,44%)]">
-            Every product page now supports the schema-driven purchase and download flows, so the
-            catalog can present physical listings and digital files with a more polished storefront layout.
-          </p>
-        </div>
+<section id="about" class="py-20 bg-[hsl(0,0%,96%)] scroll-mt-16">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl sm:text-4xl font-bold text-[hsl(0,0%,9%)] mb-6">About</h2>
 
-        <div class="grid gap-6 sm:grid-cols-3">
-          <ServiceCard icon="document-outline" title="Digital Files">
-            Ready-to-print STL files for your own machine.{' '}
-            <a
-              href="https://makerworld.com/en/@jaeseopark/upload"
-              class="text-[hsl(176,35%,50%)] hover:underline font-medium"
-              target="_blank"
-              rel="noreferrer noopener"
-            >Browse the MakerWorld shop</a>.
-          </ServiceCard>
+    <p class="text-[hsl(0,0%,30%)] text-base leading-relaxed mb-10">
+      Hi, I'm Jaeseo. I design and sell functional 3D prints and digital files created to solve
+      real-world problems. Whether it's a custom tool, a specific hardware adapter, or an
+      everyday fix, I build things that actually work.
+    </p>
 
-          <ServiceCard icon="pencil-outline" title="Custom Design">
-            Bespoke CAD modeling to create specific parts you can't find elsewhere.{' '}
-            <a href="#" data-email-obfuscate class="text-[hsl(176,35%,50%)] hover:underline font-medium">
-              Email me
-            </a>{' '}
-            to start your project.
-          </ServiceCard>
+    <div class="grid sm:grid-cols-3 gap-6 mb-10">
+      <ServiceCard icon="document-outline" title="Digital Files">
+        Ready-to-print STL files for your own machine.{' '}
+        <a
+          href="https://makerworld.com/en/@jaeseopark/upload"
+          class="text-[hsl(176,35%,50%)] hover:underline font-medium"
+          target="_blank"
+          rel="noreferrer noopener"
+        >Browse the MakerWorld shop</a>.
+      </ServiceCard>
 
-          <ServiceCard icon="cube-outline" title="Physical Goods">
-            Durable, 3D-printed items shipped directly to you.{' '}
-            <a
-              href="#"
-              class="text-[hsl(176,35%,50%)] hover:underline font-medium"
-              target="_blank"
-              rel="noreferrer noopener"
-            >See the Etsy catalog</a>.<sup><a href="#direct-order" class="text-[hsl(176,35%,50%)]">*</a></sup>
-          </ServiceCard>
-        </div>
-      </div>
+      <ServiceCard icon="pencil-outline" title="Custom Design">
+        Bespoke CAD modeling to create specific parts you can't find elsewhere.{' '}
+        <a href="#" data-email-obfuscate class="text-[hsl(176,35%,50%)] hover:underline font-medium">
+          Email me
+        </a>{' '}
+        to start your project.
+      </ServiceCard>
 
-      <div class="mt-10 rounded-[1.5rem] border border-[hsl(180,15%,88%)] bg-[hsl(42,33%,98%)] p-6">
-        <p id="direct-order" class="text-sm text-[hsl(0,0%,44%)] leading-relaxed mb-4 border-b border-[hsl(0,0%,90%)] pb-4">
-          <strong class="text-[hsl(0,0%,30%)]">*</strong> I am always open to working out a deal outside of Etsy to bypass
-          platform fees and pass those savings directly to you. For custom designs, bulk orders, or direct
-          purchases, <a href="#" data-email-obfuscate class="text-[hsl(176,35%,50%)] hover:underline font-medium">email me</a> with what you are looking to buy!
-        </p>
-
-        <p class="text-sm text-[hsl(0,0%,44%)] leading-relaxed">
-          I also provide <strong class="text-[hsl(0,0%,30%)]">Software Consulting</strong> for web applications
-          and server-side development. If you have a technical project or need help with backend architecture,
-          feel free to get in touch.
-        </p>
-      </div>
+      <ServiceCard icon="cube-outline" title="Physical Goods">
+        Durable, 3D-printed items shipped directly to you.{' '}
+        <a
+          href="#"
+          class="text-[hsl(176,35%,50%)] hover:underline font-medium"
+          target="_blank"
+          rel="noreferrer noopener"
+        >See the Etsy catalog</a>.<sup><a href="#direct-order" class="text-[hsl(176,35%,50%)]">*</a></sup>
+      </ServiceCard>
     </div>
+
+    <p id="direct-order" class="text-sm text-[hsl(0,0%,44%)] leading-relaxed mb-4 border-t border-[hsl(0,0%,90%)] pt-4">
+      <strong class="text-[hsl(0,0%,30%)]">*</strong> I am always open to working out a deal outside of Etsy to bypass
+      platform fees and pass those savings directly to you. For custom designs, bulk orders, or direct
+      purchases, <a href="#" data-email-obfuscate class="text-[hsl(176,35%,50%)] hover:underline font-medium">email me</a> with what you are looking to buy!
+    </p>
+
+    <p class="text-sm text-[hsl(0,0%,44%)] leading-relaxed">
+      I also provide <strong class="text-[hsl(0,0%,30%)]">Software Consulting</strong> for web applications
+      and server-side development. If you have a technical project or need help with backend architecture,
+      feel free to get in touch.
+    </p>
   </div>
 </section>

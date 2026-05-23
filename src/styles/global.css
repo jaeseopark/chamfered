@@ -2,14 +2,11 @@
 
 @theme {
   --color-teal: hsl(176, 35%, 63%);
-  --color-teal-deep: hsl(176, 56%, 28%);
   --color-sonic-silver: hsl(0, 0%, 44%);
   --color-eerie-black: hsl(0, 0%, 9%);
   --color-ocean-green: hsl(148, 45%, 58%);
   --color-candy-pink: hsl(356, 65%, 63%);
   --color-cultured: hsl(0, 0%, 96%);
-  --color-cream: hsl(42, 33%, 98%);
-  --color-border: hsl(180, 15%, 88%);
   --font-jost: "Jost", sans-serif;
 }
 
@@ -21,33 +18,10 @@
 
 body {
   font-family: var(--font-jost, "Jost", sans-serif);
-  background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--color-teal) 18%, white) 0%, transparent 36%),
-    radial-gradient(circle at top right, color-mix(in srgb, var(--color-ocean-green) 16%, white) 0%, transparent 28%),
-    linear-gradient(180deg, var(--color-cream) 0%, white 28%, white 100%);
+  background-color: white;
   color: hsl(0, 0%, 9%);
-  min-height: 100vh;
 }
 
 html {
   scroll-behavior: smooth;
-}
-
-::selection {
-  background: color-mix(in srgb, var(--color-teal) 35%, white);
-}
-
-a,
-button {
-  transition:
-    color 180ms ease,
-    background-color 180ms ease,
-    border-color 180ms ease,
-    box-shadow 180ms ease,
-    transform 180ms ease;
-}
-
-dialog::backdrop {
-  background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(6px);
 }
