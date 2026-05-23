@@ -1,4 +1,6 @@
 ---
+import { isExternalUrl } from '../utils/links';
+
 interface Props {
   backgroundImage: string;
   title: string;
@@ -17,7 +19,7 @@ const {
   secondaryCtaText,
   secondaryCtaHref,
 } = Astro.props;
-const isPrimaryCTAExternal = /^https?:\/\//.test(ctaHref);
+const isPrimaryCTAExternal = isExternalUrl(ctaHref);
 ---
 
 <section
