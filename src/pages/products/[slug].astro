@@ -1,6 +1,5 @@
 ---
 import { getCollection, render } from 'astro:content';
-import { DEFAULT_DONATION_AMOUNTS, DONATION_CURRENCY, DONATION_STEP, MIN_DONATION_AMOUNT, PAYPAL_DONATION_URL } from '../../consts';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
@@ -108,9 +107,6 @@ const digitalPurchaseLinks = [
                   type="button"
                   class="inline-flex items-center gap-2 bg-[hsl(176,35%,63%)] hover:bg-[hsl(176,35%,50%)] text-white text-sm font-semibold px-5 py-3 rounded-full transition-colors"
                   data-digital-download-trigger
-                  data-paypal-url={PAYPAL_DONATION_URL}
-                  data-donation-currency={DONATION_CURRENCY}
-                  data-min-donation-amount={MIN_DONATION_AMOUNT}
                   aria-haspopup="dialog"
                 >
                   <ion-icon name="download-outline" aria-hidden="true" />
@@ -124,9 +120,6 @@ const digitalPurchaseLinks = [
                   <div class="p-6 sm:p-7">
                     <div class="flex items-start justify-between gap-4 mb-4">
                       <div>
-                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-[hsl(176,35%,45%)] mb-2">
-                          Optional donation
-                        </p>
                         <h2 class="text-2xl font-bold text-[hsl(0,0%,9%)]">Support this design</h2>
                       </div>
                       <button
@@ -138,88 +131,57 @@ const digitalPurchaseLinks = [
                       </button>
                     </div>
 
-                    <p class="text-sm text-[hsl(0,0%,35%)] mb-5">
-                      If you'd like, you can send a quick PayPal tip before downloading. You can also skip and go straight to the design files.
-                    </p>
+                    <div data-donation-stage>
+                      <p class="text-sm text-[hsl(0,0%,35%)] mb-5">
+                        Would you like to support Chamfered with a donation?
+                      </p>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-                      {DEFAULT_DONATION_AMOUNTS.map((amount) => (
-                        <button
-                          type="button"
-                          class="inline-flex items-center justify-center gap-2 rounded-full border border-[hsl(0,0%,86%)] px-4 py-3 text-sm font-semibold text-[hsl(0,0%,18%)] hover:border-[hsl(176,35%,50%)] hover:text-[hsl(176,35%,40%)] transition-colors"
-                          data-donation-amount={amount}
+                      <div class="flex flex-col sm:flex-row gap-3">
+                        <a
+                          href="https://www.paypal.com/donate/?hosted_button_id=FFUCZRH3R62CE"
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full transition duration-200 text-sm font-semibold flex-1"
+                          style="background-color: rgb(255, 209, 64); color: rgb(0, 48, 135);"
+                          data-proceed-to-downloads
                         >
                           <ion-icon name="logo-paypal" aria-hidden="true" />
-                          Donate ${amount}
+                          Donate
+                        </a>
+                        <button
+                          type="button"
+                          class="inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(176,35%,63%)] px-5 py-3 text-sm font-semibold text-white hover:bg-[hsl(176,35%,50%)] transition-colors flex-1"
+                          data-skip-donation
+                        >
+                          <ion-icon name="arrow-forward-outline" aria-hidden="true" />
+                          Skip
                         </button>
-                      ))}
+                      </div>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row gap-3 mb-5">
-                      <input
-                        type="number"
-                      min={MIN_DONATION_AMOUNT}
-                      step={DONATION_STEP}
-                        inputmode="decimal"
-                        placeholder={`Custom amount (${DONATION_CURRENCY})`}
-                        class="w-full rounded-full border border-[hsl(0,0%,86%)] px-4 py-3 text-sm text-[hsl(0,0%,18%)] focus:outline-none focus:border-[hsl(176,35%,50%)]"
-                        data-custom-donation-amount
-                      />
-                      <button
-                        type="button"
-                        class="inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(0,0%,9%)] px-5 py-3 text-sm font-semibold text-white hover:bg-[hsl(0,0%,18%)] transition-colors"
-                        data-custom-donation-submit
-                      >
-                        <ion-icon name="logo-paypal" aria-hidden="true" />
-                        Donate
-                      </button>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-3">
-                      <button
-                        type="button"
-                        class="inline-flex items-center justify-center gap-2 rounded-full bg-[hsl(176,35%,63%)] px-5 py-3 text-sm font-semibold text-white hover:bg-[hsl(176,35%,50%)] transition-colors"
-                        data-skip-donation
-                      >
-                        <ion-icon name="arrow-forward-outline" aria-hidden="true" />
-                        Skip to download
-                      </button>
-                      <p class="self-center text-sm text-[hsl(0,0%,45%)]">
-                        Currency: {DONATION_CURRENCY}
+                    <div data-downloads-stage class="hidden">
+                      <p class="text-sm text-[hsl(0,0%,35%)] mb-5">
+                        Download links are available below.
                       </p>
+
+                      <div class="flex flex-wrap items-center gap-3">
+                        {digitalPurchaseLinks.map((link) => (
+                          <a
+                            href={link.href}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            class={`inline-flex items-center gap-2 ${link.accent} hover:brightness-95 text-white text-sm font-semibold px-5 py-3 rounded-full transition duration-200`}
+                          >
+                            <ion-icon name={link.icon} aria-hidden="true" />
+                            {link.label}
+                          </a>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </dialog>
-
-                <div class="hidden basis-full" data-digital-download-links>
-                  <div class="mt-2 rounded-2xl border border-[hsl(0,0%,90%)] bg-[hsl(0,0%,98%)] p-4 sm:p-5">
-                    <p class="text-sm text-[hsl(0,0%,35%)] mb-4" data-download-status>
-                      Download links are ready below.
-                    </p>
-                    <div class="flex flex-wrap items-center gap-3">
-                      {digitalPurchaseLinks.map((link) => (
-                        <a
-                          href={link.href}
-                          target="_blank"
-                          rel="noreferrer noopener"
-                          class={`inline-flex items-center gap-2 ${link.accent} hover:brightness-95 text-white text-sm font-semibold px-5 py-3 rounded-full transition duration-200`}
-                        >
-                          <ion-icon name={link.icon} aria-hidden="true" />
-                          {link.label}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </div>
               </>
             )}
-
-            <a
-              href="/#shop"
-              class="inline-flex items-center gap-2 text-sm font-semibold border border-[hsl(0,0%,86%)] text-[hsl(0,0%,25%)] hover:border-[hsl(0,0%,70%)] px-5 py-3 rounded-full transition-colors"
-            >
-              Browse more products
-            </a>
           </div>
         </div>
       </article>
@@ -230,23 +192,13 @@ const digitalPurchaseLinks = [
 </Layout>
 
 <script>
-  import { DONATION_CURRENCY, MIN_DONATION_AMOUNT } from '../../consts';
-
   const downloadTrigger = document.querySelector('[data-digital-download-trigger]');
   const donationDialog = document.querySelector('[data-donation-dialog]');
-  const digitalDownloadLinks = document.querySelector('[data-digital-download-links]');
-  const downloadStatus = document.querySelector('[data-download-status]');
-  const customDonationInput = document.querySelector('[data-custom-donation-amount]');
-  const donationCurrency = downloadTrigger instanceof HTMLElement
-    ? downloadTrigger.dataset.donationCurrency ?? DONATION_CURRENCY
-    : DONATION_CURRENCY;
-  const minimumDonationAmount = Number(downloadTrigger instanceof HTMLElement
-    ? downloadTrigger.dataset.minDonationAmount
-    : undefined) || MIN_DONATION_AMOUNT;
-  const minimumDonationLabel = new Intl.NumberFormat(undefined, {
-    style: 'currency',
-    currency: donationCurrency,
-  }).format(minimumDonationAmount);
+  const donationStage = document.querySelector('[data-donation-stage]');
+  const downloadsStage = document.querySelector('[data-downloads-stage]');
+  const proceedToDownloadsLinks = document.querySelectorAll('[data-proceed-to-downloads]');
+  const skipDonationButtons = document.querySelectorAll('[data-skip-donation]');
+
   const closeDonationDialog = () => {
     if (!(donationDialog instanceof HTMLDialogElement)) {
       return;
@@ -254,60 +206,25 @@ const digitalPurchaseLinks = [
     if (donationDialog.open) {
       donationDialog.close();
     }
-  };
-  const revealDownloads = (message: string) => {
-    if (!(digitalDownloadLinks instanceof HTMLElement) || !(downloadStatus instanceof HTMLElement)) {
-      console.warn('Digital download UI is missing required elements.');
-      return;
-    }
-    digitalDownloadLinks.classList.remove('hidden');
-    downloadStatus.textContent = message;
-  };
-  const resetCustomDonationValidity = () => {
-    if (customDonationInput instanceof HTMLInputElement) {
-      customDonationInput.setCustomValidity('');
+    // Reset to donation stage when dialog is closed
+    if (donationStage instanceof HTMLElement && downloadsStage instanceof HTMLElement) {
+      donationStage.classList.remove('hidden');
+      downloadsStage.classList.add('hidden');
     }
   };
-  const getCustomDonationAmount = () => {
-    if (!(customDonationInput instanceof HTMLInputElement)) {
-      return null;
+
+  const proceedToDownloads = () => {
+    if (donationStage instanceof HTMLElement && downloadsStage instanceof HTMLElement) {
+      donationStage.classList.add('hidden');
+      downloadsStage.classList.remove('hidden');
     }
-    resetCustomDonationValidity();
-    const amount = Number(customDonationInput.value);
-    if (!Number.isFinite(amount) || amount <= 0 || amount < minimumDonationAmount) {
-      customDonationInput.setCustomValidity(`Please enter a donation amount of at least ${minimumDonationLabel}.`);
-      customDonationInput.reportValidity();
-      return null;
-    }
-    return amount;
-  };
-  customDonationInput?.addEventListener('input', resetCustomDonationValidity);
-  const openPayPalDonation = (amount: number) => {
-    if (!(downloadTrigger instanceof HTMLElement)) {
-      console.warn('Digital download trigger is missing.');
-      revealDownloads('Download links are ready below.');
-      return;
-    }
-    const paypalUrl = downloadTrigger.dataset.paypalUrl;
-    if (!paypalUrl) {
-      console.warn('PayPal donation URL is missing.');
-      revealDownloads('Download links are ready below.');
-      return;
-    }
-    const donationUrl = new URL(paypalUrl);
-    donationUrl.searchParams.set('amount', amount.toFixed(2));
-    donationUrl.searchParams.set('currency_code', donationCurrency);
-    window.open(donationUrl.toString(), '_blank', 'noopener,noreferrer');
-    revealDownloads('Thanks for supporting Chamfered — your PayPal donation page opened in a new tab.');
   };
 
   if (downloadTrigger instanceof HTMLButtonElement) {
     downloadTrigger.addEventListener('click', () => {
       if (donationDialog instanceof HTMLDialogElement) {
         donationDialog.showModal();
-        return;
       }
-      revealDownloads('Download links are ready below.');
     });
   }
 
@@ -315,31 +232,15 @@ const digitalPurchaseLinks = [
     button.addEventListener('click', closeDonationDialog);
   });
 
-  document.querySelectorAll('[data-donation-amount]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const amount = Number(button.getAttribute('data-donation-amount'));
-      if (!Number.isFinite(amount) || amount <= 0) {
-        return;
-      }
-      resetCustomDonationValidity();
-      openPayPalDonation(amount);
-      closeDonationDialog();
+  proceedToDownloadsLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      // Allow the default link behavior (open in new tab)
+      // but also proceed to show downloads
+      proceedToDownloads();
     });
   });
 
-  const customDonationButton = document.querySelector('[data-custom-donation-submit]');
-  customDonationButton?.addEventListener('click', () => {
-    const amount = getCustomDonationAmount();
-    if (amount === null) {
-      return;
-    }
-    openPayPalDonation(amount);
-    closeDonationDialog();
-  });
-
-  const skipDonationButton = document.querySelector('[data-skip-donation]');
-  skipDonationButton?.addEventListener('click', () => {
-    revealDownloads('Download links are ready below.');
-    closeDonationDialog();
+  skipDonationButtons.forEach((button) => {
+    button.addEventListener('click', proceedToDownloads);
   });
 </script>
