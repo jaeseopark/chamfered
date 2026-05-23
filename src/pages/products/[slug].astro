@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
-import { DEFAULT_DONATION_AMOUNTS, DONATION_CURRENCY, MIN_DONATION_AMOUNT, PAYPAL_DONATION_URL } from '../../consts';
+import { DEFAULT_DONATION_AMOUNTS, DONATION_CURRENCY, DONATION_STEP, MIN_DONATION_AMOUNT, PAYPAL_DONATION_URL } from '../../consts';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
@@ -159,7 +159,7 @@ const digitalPurchaseLinks = [
                       <input
                         type="number"
                       min={MIN_DONATION_AMOUNT}
-                        step="0.01"
+                      step={DONATION_STEP}
                         inputmode="decimal"
                         placeholder={`Custom amount (${DONATION_CURRENCY})`}
                         class="w-full rounded-full border border-[hsl(0,0%,86%)] px-4 py-3 text-sm text-[hsl(0,0%,18%)] focus:outline-none focus:border-[hsl(176,35%,50%)]"
@@ -274,7 +274,7 @@ const digitalPurchaseLinks = [
     }
     resetCustomDonationValidity();
     const amount = Number(customDonationInput.value);
-    if (!Number.isFinite(amount) || amount < minimumDonationAmount) {
+    if (!Number.isFinite(amount) || amount <= 0 || amount < minimumDonationAmount) {
       customDonationInput.setCustomValidity(`Please enter a donation amount of at least ${minimumDonationLabel}.`);
       customDonationInput.reportValidity();
       return null;
