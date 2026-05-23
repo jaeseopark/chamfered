@@ -11,7 +11,7 @@ interface Props {
 const {
   backgroundImage,
   title,
-  description = 'Browse practical 3D prints, downloadable files, and custom fabrication work through a storefront inspired by modern ecommerce landing pages.',
+  description = 'Browse practical 3D prints, downloadable files, and custom fabrication work through a storefront inspired by modern e-commerce landing pages.',
   ctaText,
   ctaHref,
   secondaryCtaText,
@@ -43,7 +43,7 @@ const isPrimaryExternal = /^https?:\/\//.test(ctaHref);
           rel={isPrimaryExternal ? 'noreferrer noopener' : undefined}
         >
           {ctaText}
-          <ion-icon name="open-outline" aria-hidden="true" />
+          <ion-icon name={isPrimaryExternal ? 'open-outline' : 'arrow-forward-outline'} aria-hidden="true" />
         </a>
         {secondaryCtaText && secondaryCtaHref && (
           <a
