@@ -230,14 +230,23 @@ const digitalPurchaseLinks = [
 </Layout>
 
 <script>
+  import { DONATION_CURRENCY, MIN_DONATION_AMOUNT } from '../../consts';
+
   const downloadTrigger = document.querySelector('[data-digital-download-trigger]');
   const donationDialog = document.querySelector('[data-donation-dialog]');
   const digitalDownloadLinks = document.querySelector('[data-digital-download-links]');
   const downloadStatus = document.querySelector('[data-download-status]');
   const customDonationInput = document.querySelector('[data-custom-donation-amount]');
+  const donationCurrency = downloadTrigger instanceof HTMLElement
+    ? downloadTrigger.dataset.donationCurrency ?? DONATION_CURRENCY
+    : DONATION_CURRENCY;
   const minimumDonationAmount = Number(downloadTrigger instanceof HTMLElement
     ? downloadTrigger.dataset.minDonationAmount
-    : undefined) || 1;
+    : undefined) || MIN_DONATION_AMOUNT;
+  const minimumDonationLabel = new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: donationCurrency,
+  }).format(minimumDonationAmount);
   const closeDonationDialog = () => {
     if (!(donationDialog instanceof HTMLDialogElement)) {
       return;
@@ -266,7 +275,7 @@ const digitalPurchaseLinks = [
     resetCustomDonationValidity();
     const amount = Number(customDonationInput.value);
     if (!Number.isFinite(amount) || amount < minimumDonationAmount) {
-      customDonationInput.setCustomValidity(`Please enter a donation amount of at least $${minimumDonationAmount.toFixed(2)}.`);
+      customDonationInput.setCustomValidity(`Please enter a donation amount of at least ${minimumDonationLabel}.`);
       customDonationInput.reportValidity();
       return null;
     }
@@ -285,7 +294,6 @@ const digitalPurchaseLinks = [
       revealDownloads('Download links are ready below.');
       return;
     }
-    const donationCurrency = downloadTrigger.dataset.donationCurrency ?? 'USD';
     const donationUrl = new URL(paypalUrl);
     donationUrl.searchParams.set('amount', amount.toFixed(2));
     donationUrl.searchParams.set('currency_code', donationCurrency);
