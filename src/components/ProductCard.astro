@@ -25,7 +25,6 @@ const {
 
 const badgeBg = badgeColor === 'red' ? 'bg-[hsl(356,65%,63%)]' : 'bg-[hsl(148,45%,58%)]';
 const internalLink = productHref ?? '#';
-const hasInternalLink = internalLink !== '#';
 let internalLinkLabel = 'View product';
 if (hasDigitalPurchase && hasPhysicalPurchase) {
   internalLinkLabel = 'Shop + download';
@@ -33,7 +32,7 @@ if (hasDigitalPurchase && hasPhysicalPurchase) {
   internalLinkLabel = 'Download options';
 } else if (hasPhysicalPurchase) {
   internalLinkLabel = 'Purchase options';
-} else if (!hasInternalLink) {
+} else if (internalLink === '#') {
   internalLinkLabel = 'Coming soon';
 }
 ---
