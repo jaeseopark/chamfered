@@ -18,6 +18,7 @@ const {
   secondaryCtaHref,
 } = Astro.props;
 const isPrimaryExternal = /^https?:\/\//.test(ctaHref);
+const primaryCtaIcon = isPrimaryExternal ? 'open-outline' : 'arrow-forward-outline';
 ---
 
 <section
@@ -43,7 +44,7 @@ const isPrimaryExternal = /^https?:\/\//.test(ctaHref);
           rel={isPrimaryExternal ? 'noreferrer noopener' : undefined}
         >
           {ctaText}
-          <ion-icon name="open-outline" aria-hidden="true" />
+          <ion-icon name={primaryCtaIcon} aria-hidden="true" />
         </a>
         {secondaryCtaText && secondaryCtaHref && (
           <a
