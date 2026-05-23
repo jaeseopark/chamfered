@@ -235,29 +235,40 @@ const digitalPurchaseLinks = [
   const downloadStatus = document.querySelector('[data-download-status]');
   const customDonationInput = document.querySelector('[data-custom-donation-amount]');
   const closeDonationDialog = () => {
-    if (donationDialog instanceof HTMLDialogElement && donationDialog.open) {
+    if (!(donationDialog instanceof HTMLDialogElement)) {
+      return;
+    }
+    if (donationDialog.open) {
       donationDialog.close();
     }
   };
   const revealDownloads = (message: string) => {
-    if (digitalDownloadLinks instanceof HTMLElement) {
-      digitalDownloadLinks.classList.remove('hidden');
+    if (!(digitalDownloadLinks instanceof HTMLElement) || !(downloadStatus instanceof HTMLElement)) {
+      console.warn('Digital download UI is missing required elements.');
+      return;
     }
-    if (downloadStatus instanceof HTMLElement) {
-      downloadStatus.textContent = message;
+    digitalDownloadLinks.classList.remove('hidden');
+    downloadStatus.textContent = message;
+  };
+  const resetCustomDonationValidity = () => {
+    if (customDonationInput instanceof HTMLInputElement) {
+      customDonationInput.setCustomValidity('');
     }
   };
+  customDonationInput?.addEventListener('input', resetCustomDonationValidity);
   const openPayPalDonation = (amount: number) => {
     if (!(downloadTrigger instanceof HTMLElement)) {
+      console.warn('Digital download trigger is missing.');
       revealDownloads('Download links are ready below.');
       return;
     }
-    const paypalUrl = downloadTrigger.dataset['paypalUrl'];
+    const paypalUrl = downloadTrigger.dataset.paypalUrl;
     if (!paypalUrl) {
+      console.warn('PayPal donation URL is missing.');
       revealDownloads('Download links are ready below.');
       return;
     }
-    const donationCurrency = downloadTrigger.dataset['donationCurrency'] ?? 'USD';
+    const donationCurrency = downloadTrigger.dataset.donationCurrency ?? 'USD';
     const donationUrl = new URL(paypalUrl);
     donationUrl.searchParams.set('amount', amount.toFixed(2));
     donationUrl.searchParams.set('currency_code', donationCurrency);
@@ -285,6 +296,7 @@ const digitalPurchaseLinks = [
       if (!Number.isFinite(amount) || amount <= 0) {
         return;
       }
+      resetCustomDonationValidity();
       openPayPalDonation(amount);
       closeDonationDialog();
     });
@@ -299,9 +311,11 @@ const digitalPurchaseLinks = [
     }
     const amount = Number(customDonationInput.value);
     if (!Number.isFinite(amount) || amount <= 0) {
+      customDonationInput.setCustomValidity('Enter a donation amount greater than 0.');
       customDonationInput.reportValidity();
       return;
     }
+    resetCustomDonationValidity();
     openPayPalDonation(amount);
     closeDonationDialog();
   });
