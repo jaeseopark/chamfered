@@ -12,9 +12,9 @@ Multiple unrelated apps **share one S3 bucket** with **separate CloudFront distr
 
 ```
 chamfered-webapps (S3 bucket)
-├── app1/              → Distribution E2221UPIQ451E5 → app1.chamfered.dev
-├── app2/              → Distribution D1234ABCD5678E → app2.chamfered.dev
-└── app3/              → Distribution F9876XYZK2345L → app3.chamfered.dev
+├── app1/              → CF Distribution with OriginPath:/app1 → app1.chamfered.dev
+├── app2/              → CF Distribution with OriginPath:/app2 → app2.chamfered.dev
+└── app3/              → CF Distribution with OriginPath:/app3 → app3.chamfered.dev
 ```
 
 **Why separate distributions?**
@@ -23,6 +23,7 @@ chamfered-webapps (S3 bucket)
 - Separate monitoring, logs, and error pages per domain
 - Isolated GitHub Actions workflows per repository
 - Better security: each app's IAM role only accesses its S3 prefix
+- **Origin Path isolation**: each distribution's `OriginPath` ensures it serves from the correct app folder
 
 **Single distribution per app** (not shared) keeps blast radius minimal and allows per-app customization (headers, geo-restrictions, WAF rules, etc.).
 
