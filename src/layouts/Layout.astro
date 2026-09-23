@@ -5,8 +5,8 @@ interface Props {
 }
 
 const {
-  title = 'Chamfered - All Things 3D Printing',
-  description = 'Functional 3D prints, digital files, and custom designs by Jaeseo.',
+  title = 'Chamfered - App Directory',
+  description = 'Links to independent webapps by Jaeseo',
 } = Astro.props;
 ---
 
@@ -25,18 +25,11 @@ const {
       href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <style is:global>
+      @import '../styles/global.css';
+    </style>
   </head>
   <body>
     <slot />
-    <script
-      is:inline
-      type="module"
-      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      is:inline
-      nomodule
-      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
-    ></script>
   </body>
 </html>
