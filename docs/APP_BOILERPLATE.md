@@ -2,9 +2,29 @@
 
 Deploy static apps to `chamfered-webapps` S3 with CloudFront + Route53.
 
-Tech stack: react, typescript, vite, tailwind-css, vitest, storybook, eslint, node engine in package.json. Use latest dep versions available on npm.
+Tech stack: react, typescript, vite, tailwind-css, vitest, storybook, eslint, node engine in package.json. Use latest dep versions available on npm. Actions use pinned commit SHAs for security.
 
 **Variables**: `{REPO_NAME}`(for trust policy), `{APP_NAME}`(for s3 prefix), `{SUBDOMAIN}`
+
+## Architecture: Shared S3 Bucket, Separate Distributions
+
+Multiple unrelated apps **share one S3 bucket** with **separate CloudFront distributions** (one per app):
+
+```
+chamfered-webapps (S3 bucket)
+├── app1/              → Distribution E2221UPIQ451E5 → app1.chamfered.dev
+├── app2/              → Distribution D1234ABCD5678E → app2.chamfered.dev
+└── app3/              → Distribution F9876XYZK2345L → app3.chamfered.dev
+```
+
+**Why separate distributions?**
+- Each app gets independent cache invalidation (deploy without affecting others)
+- Different cache policies per app (HTML: no-cache | Assets: 1hr)
+- Separate monitoring, logs, and error pages per domain
+- Isolated GitHub Actions workflows per repository
+- Better security: each app's IAM role only accesses its S3 prefix
+
+**Single distribution per app** (not shared) keeps blast radius minimal and allows per-app customization (headers, geo-restrictions, WAF rules, etc.).
 
 ## Step 1: IAM Role
 
@@ -85,52 +105,89 @@ Create `.github/workflows/deploy.yml`:
 
 ```yaml
 name: Deploy
+
 on:
   push:
     branches: [master]
+
 permissions:
+  contents: read
   id-token: write
-env:
-  AWS_ACCOUNT_ID: '811555881555'
-  S3_BUCKET: chamfered-webapps
-  S3_PREFIX: {APP_NAME}
-  CF_DIST_ID: {CLOUDFRONT_DIST_ID}
+
+concurrency:
+  group: 'deploy'
+  cancel-in-progress: true
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: '18' }
-      - uses: pnpm/action-setup@v2
-        with: { version: '8' }
-      - run: pnpm install --frozen-lockfile && pnpm build
-      - uses: actions/upload-artifact@v3
-        with: { name: build, path: dist }
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v3
-        with: { name: build, path: ./dist }
-      - uses: aws-actions/configure-aws-credentials@v4
+      - name: Checkout Repository
+        uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
+
+      - name: Setup Node.js 26
+        uses: actions/setup-node@680d1e489b82f1243de15bc7665c0007e3c9a860
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy-{APP_NAME}
+          node-version: '26'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Code Quality Checks
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Run Unit & Component Tests
+        run: npm run test:ci
+
+      - name: Build Web Application
+        run: npm run build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@3557a071ad648a12260a481c2e613d138d99c690
+        with:
+          role-to-assume: arn:aws:iam::811555881555:role/github-actions-deploy-{APP_NAME}
           aws-region: us-west-2
-      - run: |
-          aws s3 sync ./dist s3://${{ env.S3_BUCKET }}/${{ env.S3_PREFIX }}/ --delete --cache-control 'public, max-age=3600' --exclude '*.html'
-          aws s3 sync ./dist s3://${{ env.S3_BUCKET }}/${{ env.S3_PREFIX }}/ --cache-control 'public, max-age=0, must-revalidate' --include '*.html'
-          aws cloudfront create-invalidation --distribution-id ${{ env.CF_DIST_ID }} --paths '/*'
+
+      - name: Deploy to S3
+        run: aws s3 sync ./dist s3://chamfered-webapps/{APP_NAME} --delete
+
+      - name: Invalidate CloudFront Distribution
+        run: aws cloudfront create-invalidation --distribution-id {CLOUDFRONT_DIST_ID} --paths "/*"
 ```
 
-## Example: Grey
-
-- Prefix: `grey/` | Domain: `grey.chamfered.dev` | IAM: `github-actions-deploy-grey`
-- CloudFront: `E2221UPIQ451E5` | URL: `https://grey.chamfered.dev`
+**Notes:**
+- Actions use pinned commit SHAs (e.g., `actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a`) instead of `v4` for security and reproducibility
+- Single unified job combining build and deploy (no artifact passing)
+- Include lint, typecheck, and test steps before building
+- Uses `concurrency` to cancel previous deployments when pushing new commits
+- S3 sync with `--delete` removes files not in local `dist/`
 
 ## Caching
 
-**HTML**: no-cache | **Assets**: 1 hour
+CloudFront caching is configured via the distribution's **DefaultCacheBehavior**:
+- **HTML**: `DefaultTTL: 0` (no-cache, always revalidate)
+- **Assets** (JS/CSS): `DefaultTTL: 86400` (1 hour)
+
+For fine-grained per-file-type caching, modify the S3 sync command:
+
+```bash
+# Cache static assets (1 hour)
+aws s3 sync ./dist s3://chamfered-webapps/{APP_NAME}/ --delete \
+  --cache-control 'public, max-age=3600' \
+  --exclude '*.html' --exclude '*.json'
+
+# Don't cache HTML (always revalidate)
+aws s3 sync ./dist s3://chamfered-webapps/{APP_NAME}/ \
+  --cache-control 'public, max-age=0, must-revalidate' \
+  --include '*.html'
+```
 
 ## Quick Checks
 
@@ -149,3 +206,17 @@ nslookup {SUBDOMAIN}.chamfered.dev
 3. Request ACM certificate (us-east-1) + validate via Route53
 4. Attach cert to CloudFront + create Route53 ALIAS
 5. Add GitHub Actions workflow
+
+## Adding More Apps (Reusing Bucket)
+
+Once `chamfered-webapps` bucket is created, adding a second app is simpler:
+
+1. **Create new IAM role** for the app's repo (Step 1, same policy structure but new role name)
+2. **Create new CloudFront distribution** pointing to same bucket with new S3 prefix (Step 2, e.g., `app2/`)
+3. **Request new ACM cert** for new subdomain in us-east-1 (Step 3)
+4. **Attach cert to new distribution** (Step 4, separate distribution)
+5. **Add GitHub Actions** to new repo's workflow (Step 5)
+
+Each app's IAM policy restricts access to its own S3 prefix: `s3:::chamfered-webapps/{APP_NAME}/*`
+
+**Note:** The S3 bucket **policy only needs to be set once** when first creating OAI. Subsequent apps just need their own CloudFront distribution, certificate, and IAM role—they automatically use the same bucket policy via different OAI identities.
