@@ -1,1 +1,52 @@
-<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="description" content="Links to independent webapps by Jaeseo"><title>Chamfered - App Directory</title><link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/index.HEA5IpM7.css"></head> <body>  <div class="min-h-screen flex items-center justify-center bg-white px-4 py-12"> <div class="w-full max-w-md"> <div class="text-center mb-12"> <h1 class="text-4xl font-bold mb-3">Chamfered</h1> <p class="text-gray-600">A collection of independent web applications</p> </div> <nav class="space-y-3"> <a href="https://aperture.chamfered.dev" target="_blank" rel="noopener noreferrer" class="block w-full p-4 border border-gray-300 rounded-lg hover:border-gray-600 hover:shadow-md transition-all duration-200"> <div class="font-semibold text-lg">Variable Aperture Visualizer</div> <div class="text-sm text-gray-600">Visualize and compare how variable-aperture zoom lenses change aperture across focal lengths</div> </a><a href="https://grey.chamfered.dev" target="_blank" rel="noopener noreferrer" class="block w-full p-4 border border-gray-300 rounded-lg hover:border-gray-600 hover:shadow-md transition-all duration-200"> <div class="font-semibold text-lg">Grey</div> <div class="text-sm text-gray-600">Fully local image editor for scanned greyscale images like receipts</div> </a> </nav> </div> </div>  </body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="Links to independent webapps by Jaeseo" />
+    <title>Chamfered - App Directory</title>
+    <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;1,100;1,200&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body,
+      section {
+        font-family: "Poppins", sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 dark:bg-gray-900">
+    <section class="min-h-screen flex items-center justify-center py-10 px-12">
+      <!-- Card Grid -->
+      <div class="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full max-w-7xl">
+        <!-- Coffee Article 1 -->
+        <div class="rounded shadow-lg shadow-gray-200 dark:shadow-gray-900 bg-white dark:bg-gray-800 duration-300 hover:-translate-y-1">
+          <a href="https://aperture.chamfered.dev" target="_blank" rel="noopener noreferrer" class="cursor-pointer block h-full">
+            <div class="p-6 flex flex-col h-full">
+              <p class="text-lg mb-4 font-bold leading-relaxed text-gray-800 dark:text-gray-300">Variable Aperture Visualizer</p>
+              <small class="leading-5 text-gray-500 dark:text-gray-400">Visualize and compare how variable-aperture zoom lenses change aperture across focal lengths</small>
+            </div>
+          </a>
+        </div>
+
+        <!-- Coffee Article 2 -->
+        <div class="rounded shadow-lg shadow-gray-200 dark:shadow-gray-900 bg-white dark:bg-gray-800 duration-300 hover:-translate-y-1">
+          <a href="https://grey.chamfered.dev" target="_blank" rel="noopener noreferrer" class="cursor-pointer block h-full">
+            <div class="p-6 flex flex-col h-full">
+              <p class="text-lg mb-4 font-bold leading-relaxed text-gray-800 dark:text-gray-300">Grey</p>
+              <small class="leading-5 text-gray-500 dark:text-gray-400">Fully local image editor for scanned greyscale images like receipts</small>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
