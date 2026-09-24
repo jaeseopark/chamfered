@@ -33,24 +33,25 @@ chamfered-webapps (S3 bucket)
 REPO_NAME="{REPO_NAME}"
 APP_NAME="{APP_NAME}"
 aws iam create-role --role-name "github-actions-deploy-${APP_NAME}" --assume-role-policy-document '{
-  "Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Federated":"arn:aws:iam::811555881555:oidc-provider/token.actions.githubusercontent.com"},"Action":"sts:AssumeRoleWithWebIdentity","Condition":{"StringEquals":{"token.actions.githubusercontent.com:sub":"repo:jaeseopark/'"${REPO_NAME}"':ref:refs/heads/master"}}}]}'
+  "Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Federated":"arn:aws:iam::811555881555:oidc-provider/token.actions.githubusercontent.com"},"Action":"sts:AssumeRoleWithWebIdentity","Condition":{"StringEquals":{"token.actions.githubusercontent.com:aud":"sts.amazonaws.com"},"StringLike":{"token.actions.githubusercontent.com:sub":"repo:jaeseopark/'"${REPO_NAME}"':*"}}}]}'
 
 aws iam put-role-policy --role-name "github-actions-deploy-${APP_NAME}" --policy-name s3-deploy --policy-document '{
-  "Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["s3:PutObject","s3:GetObject","s3:ListBucket","s3:DeleteObject"],"Resource":["arn:aws:s3:::chamfered-webapps","arn:aws:s3:::chamfered-webapps/'"${APP_NAME}"'/*"]},{"Effect":"Allow","Action":"cloudfront:CreateInvalidation","Resource":"*"}]}'
+  "Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["s3:ListBucket","s3:GetBucketLocation"],"Resource":"arn:aws:s3:::chamfered-webapps"},{"Effect":"Allow","Action":["s3:GetObject","s3:PutObject","s3:DeleteObject"],"Resource":"arn:aws:s3:::chamfered-webapps/'"${APP_NAME}"'/*"},{"Effect":"Allow","Action":"cloudfront:CreateInvalidation","Resource":"*"}]}'
 ```
 
-## Step 2: CloudFront Distribution
+## Step 2: CloudFront Distribution with Origin Access Control (OAC)
+
+**Important:** Use Origin Access Control (OAC) instead of Origin Access Identity (OAI). OAC is AWS's recommended approach for secure CloudFront-to-S3 access.
 
 ```bash
 APP_NAME="{APP_NAME}"
-OAI=$(aws cloudfront create-cloud-front-origin-access-identity --cloud-front-origin-access-identity-config "{CallerReference:\"${APP_NAME}-$(date +%s)\",Comment:\"OAI for ${APP_NAME}\"}" --query 'CloudFrontOriginAccessIdentity.Id' --output text)
-CANONICAL=$(aws cloudfront get-cloud-front-origin-access-identity --id "$OAI" --query 'CloudFrontOriginAccessIdentity.S3CanonicalUserId' --output text)
+OAC=$(aws cloudfront create-origin-access-control --origin-access-control-config "{Name:\"${APP_NAME}-oac\",OriginAccessControlOriginType:s3,SigningBehavior:always,SigningProtocol:sigv4}" --query 'OriginAccessControl.Id' --output text)
 
 aws s3api put-bucket-policy --bucket chamfered-webapps --policy '{
-  "Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"CanonicalUser":"'"${CANONICAL}"'"},"Action":["s3:GetObject","s3:ListBucket"],"Resource":["arn:aws:s3:::chamfered-webapps","arn:aws:s3:::chamfered-webapps/'"${APP_NAME}"'/*"]}]}'
+  "Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"cloudfront.amazonaws.com"},"Action":"s3:GetObject","Resource":"arn:aws:s3:::chamfered-webapps/'"${APP_NAME}"'/*","Condition":{"StringEquals":{"AWS:SourceArn":"arn:aws:cloudfront::811555881555:distribution/DIST_ID"}}}]}'
 
 DIST=$(aws cloudfront create-distribution --distribution-config '{
-  "CallerReference":"'"${APP_NAME}-$(date +%s)"'","Comment":"'"${APP_NAME}"'","Enabled":true,"Origins":{"Quantity":1,"Items":[{"Id":"S3","DomainName":"chamfered-webapps.s3.us-west-2.amazonaws.com","OriginPath":"/'"${APP_NAME}"'","S3OriginConfig":{"OriginAccessIdentity":"origin-access-identity/cloudfront/'"${OAI}"'"}}]},"DefaultRootObject":"index.html","DefaultCacheBehavior":{"TargetOriginId":"S3","ViewerProtocolPolicy":"redirect-to-https","AllowedMethods":{"Quantity":2,"Items":["GET","HEAD"]},"ForwardedValues":{"QueryString":false,"Cookies":{"Forward":"none"}},"TrustedSigners":{"Enabled":false,"Quantity":0},"MinTTL":0,"DefaultTTL":86400,"MaxTTL":31536000,"Compress":true}}' --output json)
+  "CallerReference":"'"${APP_NAME}-$(date +%s)"'","Comment":"'"${APP_NAME}"'","Enabled":true,"Origins":{"Quantity":1,"Items":[{"Id":"S3","DomainName":"chamfered-webapps.s3.us-west-2.amazonaws.com","OriginPath":"/"'"${APP_NAME}"'","S3OriginConfig":{},"OriginAccessControlId":"'"${OAC}"'"}]},"DefaultRootObject":"index.html","DefaultCacheBehavior":{"TargetOriginId":"S3","ViewerProtocolPolicy":"redirect-to-https","AllowedMethods":{"Quantity":2,"Items":["GET","HEAD"]},"ForwardedValues":{"QueryString":false,"Cookies":{"Forward":"none"}},"TrustedSigners":{"Enabled":false,"Quantity":0},"MinTTL":0,"DefaultTTL":86400,"MaxTTL":31536000,"Compress":true}}' --output json)
 
 echo "DIST_ID=$(echo $DIST | jq -r '.Distribution.Id')"
 echo "DIST_DOMAIN=$(echo $DIST | jq -r '.Distribution.DomainName')"
@@ -202,8 +203,13 @@ nslookup {SUBDOMAIN}.chamfered.dev
 
 ## Setup Steps
 
+**IMPORTANT:** Provision all AWS resources (Steps 1–4) **before** writing any application code or creating the GitHub Actions workflow. This ensures:
+- IAM roles, S3 buckets, and CloudFront distributions are ready for deployment
+- GitHub Actions workflow (Step 5) can immediately deploy after code is pushed
+- No delays or failures due to missing infrastructure
+
 1. Create IAM role for GitHub OIDC
-2. Create CloudFront distribution + OAI
+2. Create CloudFront distribution + Origin Access Control (OAC)
 3. Request ACM certificate (us-east-1) + validate via Route53
 4. Attach cert to CloudFront + create Route53 ALIAS
 5. Add GitHub Actions workflow
@@ -220,4 +226,34 @@ Once `chamfered-webapps` bucket is created, adding a second app is simpler:
 
 Each app's IAM policy restricts access to its own S3 prefix: `s3:::chamfered-webapps/{APP_NAME}/*`
 
-**Note:** The S3 bucket **policy only needs to be set once** when first creating OAI. Subsequent apps just need their own CloudFront distribution, certificate, and IAM role—they automatically use the same bucket policy via different OAI identities.
+**Note:** The S3 bucket **policy only needs to be set once** when first creating OAC. Subsequent apps just need their own CloudFront distribution, certificate, and IAM role—they automatically use the same bucket policy via different OAC identities.
+
+## Important: AWS CLI Interactive Commands
+
+Some AWS CLI commands (like `aws cloudfront get-distribution-config` and similar `get-*` operations) are **interactive and require manual scrolling**. These commands will display output in a pager (typically `less` or similar), requiring you to:
+- Scroll down through the entire content
+- Press `q` (QUIT) to return to the main shell
+
+**Avoid these interactive commands in scripts or manual workflows.** Instead:
+- **Pipe to `jq`** directly: `aws cloudfront get-distribution-config --id "$DIST_ID" | jq '...'` (outputs to stdout)
+- **Redirect to temp files**: `aws cloudfront get-distribution-config --id "$DIST_ID" > /tmp/cf.json` (avoids pager entirely)
+- **Use `--output json`** explicitly (already in examples above, but ensure it's present)
+
+This is especially important in CI/CD workflows where interactive prompts will cause timeouts or failures.
+
+## Resource Provisioning: Shared vs App-Specific
+
+**Shared resources** (created once, reused for all apps):
+- ✅ S3 bucket: `chamfered-webapps` (created once)
+- ✅ Route53 hosted zone: `chamfered.dev` (created once)
+- ✅ AWS OIDC provider for GitHub Actions: `token.actions.githubusercontent.com` (created once)
+
+**App-specific resources** (provisioned for each new app):
+- ❌ IAM role: `github-actions-deploy-{APP_NAME}` (one per app)
+- ❌ CloudFront distribution (one per app, each with its own OriginPath)
+- ❌ Origin Access Control (OAC) for CloudFront (one per app)
+- ❌ ACM certificate: `{SUBDOMAIN}.chamfered.dev` (one per app, in us-east-1)
+- ❌ Route53 DNS record: `{SUBDOMAIN}.chamfered.dev` A record (one per app)
+- ❌ GitHub Actions workflow: `.github/workflows/deploy.yml` (one per app repository)
+
+When adding a new app, you only need to provision the **app-specific resources**. The shared infrastructure is already in place.
