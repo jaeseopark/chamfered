@@ -2,7 +2,7 @@
 
 Deploy static apps to `chamfered-webapps` S3 with CloudFront + Route53.
 
-Tech stack: react, typescript, vite, tailwind-css, vitest, storybook, eslint, node engine in package.json. Use latest dep versions available on npm. Actions use pinned commit SHAs for security.
+Tech stack: React 19.3.1 or higher, TypeScript 7.0.0 or higher, Vite 8.3.4 or higher, Tailwind CSS 4.3.3 or higher, Vitest 5.0.5 or higher, Storybook 10 or higher, ESLint 10 or higher, and Node.js 26.0.0 or higher. Use latest dep versions available on npm. Actions use pinned commit SHAs for security.
 
 **Variables**: `{REPO_NAME}`(for trust policy), `{APP_NAME}`(for s3 prefix), `{SUBDOMAIN}`
 
@@ -47,6 +47,7 @@ aws iam put-role-policy --role-name "github-actions-deploy-${APP_NAME}" --policy
 APP_NAME="{APP_NAME}"
 OAC=$(aws cloudfront create-origin-access-control --origin-access-control-config "{Name:\"${APP_NAME}-oac\",OriginAccessControlOriginType:s3,SigningBehavior:always,SigningProtocol:sigv4}" --query 'OriginAccessControl.Id' --output text)
 
+# Note: append to the existing policy as opposed to overwriting.
 aws s3api put-bucket-policy --bucket chamfered-webapps --policy '{
   "Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"cloudfront.amazonaws.com"},"Action":"s3:GetObject","Resource":"arn:aws:s3:::chamfered-webapps/'"${APP_NAME}"'/*","Condition":{"StringEquals":{"AWS:SourceArn":"arn:aws:cloudfront::811555881555:distribution/DIST_ID"}}}]}'
 
