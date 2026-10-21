@@ -2,7 +2,9 @@
 
 Deploy static apps to `chamfered-webapps` S3 with CloudFront + Route53.
 
-Tech stack: React 19.3.1 or higher, TypeScript 7.0.0 or higher, Vite 8.3.4 or higher, Tailwind CSS 4.3.3 or higher, Vitest 5.0.5 or higher, Storybook 10 or higher, ESLint 10 or higher, and Node.js 26.0.0 or higher. Use latest dep versions available on npm. Actions use pinned commit SHAs for security.
+Tech stack
+
+Install the specified/higher versions of these dependencies: React 19.3.1, TypeScript 7.0.0, Vite 8.3.4, Tailwind CSS 4.3.3, Vitest 5.0.5, Storybook 10, ESLint 10, and Node.js 26.0.0. Actions use pinned commit SHAs for security.
 
 **Variables**: `{REPO_NAME}`(for trust policy), `{APP_NAME}`(for s3 prefix), `{SUBDOMAIN}`
 
